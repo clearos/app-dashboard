@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Dashboard controller.
+ * Developer widge controller.
  *
  * @category   Apps
  * @package    Dashboard
@@ -34,7 +34,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 /**
- * Dashboard controller.
+ * Developer widge controller.
  *
  * @category   Apps
  * @package    Dashboard
@@ -45,29 +45,27 @@
  * @link       http://www.clearfoundation.com/docs/developer/apps/dashboard/
  */
 
-class Dashboard extends ClearOS_Controller
+class Developer extends ClearOS_Controller
 {
     /**
-     * Dashboard summary view.
+     * Developer widget default controller.
      *
      * @return view
      */
 
     function index()
     {
-        // Load libraries
-        //---------------
+        // FIXME
+        // Add wizard test link in devel mode
+        if ($_SERVER['SERVER_PORT'] == 1501) {
+            if ($this->session->userdata('wizard'))
+                $wizard_link = "<a href='/app/base/wizard/stop'>Stop Wizard Test</a>";
+            else
+                $wizard_link = "<a href='/app/base/wizard/start'>Start Wizard Test</a>";
+        } else {
+            $wizard_link = '';
+        }
 
-        $this->lang->load('dashboard');
-
-        // Load views
-        //-----------
-
-        $views = array(
-            'dashboard/shutdown',
-            'dashboard/developer'
-        );
-
-        $this->page->view_forms($views, lang('dashboard_app_name'));
+        echo $wizard_link;
     }
 }
