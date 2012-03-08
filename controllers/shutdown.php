@@ -69,41 +69,12 @@ class Shutdown extends ClearOS_Controller
     /**
      * Shutdown view confirm view.
      *
-     * @return view
-     */
-
-    function confirm_shutdown($confirm = '')
-    {
-        // Load dependencies
-        //------------------
-
-        $this->lang->load('base');
-        $this->load->library('base/System');
-
-        // Handle action
-        //--------------
-
-        if (empty($confirm)) {
-            $confirm_uri = '/app/dashboard/shutdown/confirm_shutdown/confirmed';
-            $cancel_uri = '/app/dashboard/shutdown';
-            $items = array();
-
-            $this->page->view_confirm(lang('base_confirm_shutdown'), $confirm_uri, $cancel_uri, $items);
-        } else {
-            $this->system->shutdown(); 
-            $data['action'] = 'shutdown';
-
-            $this->page->view_form('shutdown', $data, lang('base_shutdown_restart'));
-        }
-    }
-
-    /**
-     * Restart view confirm view.
+     * @param string $type restart or shutdown
      *
      * @return view
      */
 
-    function confirm_restart($confirm = '')
+    function confirm($type = '')
     {
         // Load dependencies
         //------------------
@@ -114,17 +85,82 @@ class Shutdown extends ClearOS_Controller
         // Handle action
         //--------------
 
-        if (empty($confirm)) {
-            $confirm_uri = '/app/dashboard/shutdown/confirm_restart/confirmed';
+        if ($type === 'shutdown') {
+            $confirm_uri = '/app/dashboard/shutdown/action/shutdown';
+            $cancel_uri = '/app/dashboard/shutdown';
+            $items = array();
+
+            $this->page->view_confirm(lang('base_confirm_shutdown'), $confirm_uri, $cancel_uri, $items);
+        } else if ($type === 'restart') {
+            $confirm_uri = '/app/dashboard/shutdown/action/restart';
             $cancel_uri = '/app/dashboard/shutdown';
             $items = array();
 
             $this->page->view_confirm(lang('base_confirm_restart'), $confirm_uri, $cancel_uri, $items);
-        } else {
-            $this->system->restart(); 
-            $data['action'] = 'restart';
-
-            $this->page->view_form('shutdown', $data, lang('base_shutdown_restart'));
         }
+    }
+
+    /**
+     * Performs shutdown or restart.
+     *
+     * @param string $type restart or shutdown
+     *
+     * @return view
+     */
+
+    function action($type = '')
+    {
+        // Load dependencies
+        //------------------
+
+        $this->lang->load('base');
+        $this->load->library('base/System');
+
+        // Handle action
+        //--------------
+
+        if ($type === 'shutdown') {
+            $this->page->set_message(lang('base_system_is_shutting_down'), 'warning');
+            $this->system->shutdown(); 
+
+            redirect('/dashboard/shutdown/status');
+        } else if ($type === 'restart') {
+            $this->page->set_message(lang('base_system_is_restarting'), 'warning');
+            $this->system->restart(); 
+
+            redirect('/dashboard/shutdown/status');
+        }
+    }
+
+    /**
+     * Show status message.
+     *
+     * The page handling here is a bit unique.  When someone is shutting
+     * down or restarting a system, we don't really want to return them to
+     * the dashboard, but show them a handy status message.  However, we als
+     * want to make sure a "refresh" doesn't redo the shutdown/restart after
+     * a reboot.
+     *
+     * @return view
+     */
+
+    function status()
+    {
+        // Load dependencies
+        //------------------
+
+        $this->lang->load('base');
+        $this->load->library('base/System');
+
+        // Load views
+        //-----------
+
+        // On the first page load, show a status message
+        // On the second page load, just go back to the dashboard
+
+        if ($this->session->userdata('message_code'))
+            $this->page->view_form('shutdown_status', $data, lang('base_shutdown_restart'), array('type' => MY_Page::TYPE_SPLASH));
+        else
+            redirect('/dashboard');
     }
 }

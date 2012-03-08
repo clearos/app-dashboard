@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Dashboard view.
+ * Shutdown status message view.
  *
  * @category   ClearOS
  * @package    Base
@@ -29,25 +29,6 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////////////////////////
-// Load dependencies
-///////////////////////////////////////////////////////////////////////////////
-
-$this->lang->load('base');
-
-///////////////////////////////////////////////////////////////////////////////
-// Form 
-///////////////////////////////////////////////////////////////////////////////
-
-echo form_open('dashboard/shutdown');
-echo form_header(lang('base_system'));
-
-echo field_button_set(
-    array(
-        anchor_custom('/app/dashboard/shutdown/confirm/shutdown', lang('base_shutdown'), 'high'),
-        anchor_custom('/app/dashboard/shutdown/confirm/restart', lang('base_restart'), 'high')
-    )
-);
-
-echo form_footer();
-echo form_close();
+echo "<p align='center'>";
+echo anchor_custom('/app/dashboard', lang('dashboard_return_to_dashboard'));
+echo "</p>";
