@@ -55,17 +55,18 @@ class Developer extends ClearOS_Controller
 
     function index()
     {
-        // FIXME
-        // Add wizard test link in devel mode
         if ($_SERVER['SERVER_PORT'] == 1501) {
-            if ($this->session->userdata('wizard'))
-                $wizard_link = "<a href='/app/base/wizard/stop'>Stop Wizard Test</a>";
-            else
-                $wizard_link = "<a href='/app/base/wizard/start'>Start Wizard Test</a>";
+            if ($this->session->userdata('wizard')) {
+                $data['wizard_anchor'] = '/app/base/wizard/stop';
+                $data['wizard_text'] = 'Stop Wizard Test';
+            } else {
+                $data['wizard_anchor'] = '/app/base/wizard/start';
+                $data['wizard_text'] = 'Start Wizard Test';
+            }
         } else {
-            $wizard_link = '';
+            return;
         }
 
-        echo $wizard_link;
+        $this->page->view_form('wizard_test', $data, lang('base_wizard'));
     }
 }
