@@ -1,7 +1,7 @@
 
 Name: app-dashboard
 Epoch: 1
-Version: 1.0.6
+Version: 1.0.10
 Release: 1%{dist}
 Summary: Dashboard
 License: GPLv3
@@ -12,7 +12,7 @@ Requires: %{name}-core = 1:%{version}-%{release}
 Requires: app-base
 
 %description
-Dashboard description...
+Hello ClearOS testers!  The Dashboard App is looking pretty bare, eh?  We will add some helpful status information here in the final release.
 
 %package core
 Summary: Dashboard - APIs and install
@@ -21,7 +21,7 @@ Group: ClearOS/Libraries
 Requires: app-base-core
 
 %description core
-Dashboard description...
+Hello ClearOS testers!  The Dashboard App is looking pretty bare, eh?  We will add some helpful status information here in the final release.
 
 This package provides the core API and libraries.
 
