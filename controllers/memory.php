@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Dashboard controller.
+ * Memory information controller.
  *
  * @category   Apps
  * @package    Dashboard
@@ -34,7 +34,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 /**
- * Dashboard controller.
+ * Memory information controller.
  *
  * @category   Apps
  * @package    Dashboard
@@ -45,29 +45,71 @@
  * @link       http://www.clearfoundation.com/docs/developer/apps/dashboard/
  */
 
-class Dashboard extends ClearOS_Controller
+class Memory extends ClearOS_Controller
 {
     /**
-     * Dashboard summary view.
+     * Shutdown and restart default controller
      *
      * @return view
      */
 
     function index()
     {
-        // Load libraries
+        // Load dependencies
+        //------------------
+
+        $this->lang->load('base');
+        $this->lang->load('reports');
+        $this->load->library('base/Stats');
+
+        $body = '';
+
+        // Load view data
         //---------------
 
-        $this->lang->load('dashboard');
+        try {
+            $memory_info = $this->stats->get_memory_stats();
+        } catch (Exception $e) {
+            $this->page->view_exception($e);
+            return;
+        }
 
         // Load views
         //-----------
 
-        $views = array(
-            'dashboard/memory',
-            'dashboard/developer'
-        );
+        $this->page->view_form('dashboard/memory', $data, lang('reports_memory_information'));
+    }
 
-        $this->page->view_forms($views, lang('dashboard_app_name'));
+    /**
+     * Report data.
+     *
+     * @return JSON report data
+     */
+
+    function get_data()
+    {
+        clearos_profile(__METHOD__, __LINE__);
+
+        // Load dependencies
+        //------------------
+
+        $this->load->library('base/Stats');
+
+        // Load data
+        //----------
+
+        try {
+            $data = $this->stats->get_memory_stats();
+        } catch (Exception $e) {
+            echo json_encode(array('code' => clearos_exception_code($e), 'errmsg' => clearos_exception_message($e)));
+        }
+
+        // Show data
+        //----------
+
+        header('Cache-Control: no-cache, must-revalidate');
+        header('Expires: Fri, 01 Jan 2010 05:00:00 GMT');
+        header('Content-type: application/json');
+        echo json_encode($data);
     }
 }

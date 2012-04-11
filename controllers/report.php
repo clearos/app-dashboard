@@ -45,7 +45,7 @@
  * @link       http://www.clearfoundation.com/docs/developer/apps/dashboard/
  */
 
-class Shutdown extends ClearOS_Controller
+class Report extends ClearOS_Controller
 {
     /**
      * Shutdown and restart default controller
@@ -53,7 +53,7 @@ class Shutdown extends ClearOS_Controller
      * @return view
      */
 
-    function index()
+    function sidebar()
     {
         // Load dependencies
         //------------------
@@ -158,11 +158,9 @@ class Shutdown extends ClearOS_Controller
         // On the first page load, show a status message
         // On the second page load, just go back to the dashboard
 
-        if ($this->session->userdata('message_code')) {
-            $options['type'] = MY_Page::TYPE_SPLASH;
-            $this->page->view_form('shutdown_status', $data, lang('base_shutdown_restart'), $options);
-        } else {
+        if ($this->session->userdata('message_code'))
+            $this->page->view_form('shutdown_status', $data, lang('base_shutdown_restart'), array('type' => MY_Page::TYPE_SPLASH));
+        else
             redirect('/dashboard');
-        }
     }
 }

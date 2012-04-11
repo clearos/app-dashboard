@@ -1,15 +1,15 @@
 <?php
 
 /**
- * Dashboard controller.
+ * Memory information view.
  *
- * @category   Apps
- * @package    Dashboard
- * @subpackage Controllers
+ * @category   ClearOS
+ * @package    Base
+ * @subpackage Views
  * @author     ClearFoundation <developer@clearfoundation.com>
  * @copyright  2012 ClearFoundation
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License version 3 or later
- * @link       http://www.clearfoundation.com/docs/developer/apps/dashboard/
+ * @link       http://www.clearfoundation.com/docs/developer/apps/base/
  */
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -25,49 +25,18 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.  
 //
 ///////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-// C L A S S
+// Load dependencies
 ///////////////////////////////////////////////////////////////////////////////
 
-/**
- * Dashboard controller.
- *
- * @category   Apps
- * @package    Dashboard
- * @subpackage Controllers
- * @author     ClearFoundation <developer@clearfoundation.com>
- * @copyright  2012 ClearFoundation
- * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License version 3 or later
- * @link       http://www.clearfoundation.com/docs/developer/apps/dashboard/
- */
+$this->lang->load('dashboard');
 
-class Dashboard extends ClearOS_Controller
-{
-    /**
-     * Dashboard summary view.
-     *
-     * @return view
-     */
+///////////////////////////////////////////////////////////////////////////////
+// Chart
+///////////////////////////////////////////////////////////////////////////////
 
-    function index()
-    {
-        // Load libraries
-        //---------------
-
-        $this->lang->load('dashboard');
-
-        // Load views
-        //-----------
-
-        $views = array(
-            'dashboard/memory',
-            'dashboard/developer'
-        );
-
-        $this->page->view_forms($views, lang('dashboard_app_name'));
-    }
-}
+echo chart_widget(lang('base_memory'), "<div id='memory_chart'></div>");
