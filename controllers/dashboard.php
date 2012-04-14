@@ -65,7 +65,6 @@ class Dashboard extends ClearOS_Controller
 
         $views = array(
             'dashboard/memory',
-            'dashboard/developer'
         );
 
         $this->page->view_forms($views, lang('dashboard_app_name'));

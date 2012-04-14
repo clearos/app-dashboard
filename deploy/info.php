@@ -29,7 +29,7 @@ $app['subcategory'] = lang('base_subcategory_overview');
 
 $app['controllers']['dashboard']['title'] = $app['name'];
 $app['controllers']['shutdown']['title'] = lang('base_shutdown_restart');
-// $app['controllers']['memory']['title'] = lang('report_memory_information');
+$app['controllers']['memory']['title'] = lang('report_memory_information');
 
 /////////////////////////////////////////////////////////////////////////////
 // Packaging
