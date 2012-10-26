@@ -59,7 +59,7 @@ class Stats extends ClearOS_Controller
         //------------------
 
         $this->lang->load('base');
-        //$this->lang->load('reports');
+        $this->lang->load('dashboard');
         $this->load->library('base/Stats');
 
         $body = '';
@@ -93,7 +93,7 @@ class Stats extends ClearOS_Controller
         // Load views
         //-----------
 
-        $this->page->view_form('dashboard/stats', $array, lang('reports_stats_information'));
+        $this->page->view_form('dashboard/stats', $array, lang('dashboard_stats'));
     }
 
     /**

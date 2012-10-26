@@ -40,7 +40,7 @@ require_once $bootstrap . '/bootstrap.php';
 // T R A N S L A T I O N S
 ///////////////////////////////////////////////////////////////////////////////
 
-clearos_load_language('reports');
+clearos_load_language('base');
 
 ///////////////////////////////////////////////////////////////////////////////
 // J A V A S C R I P T
@@ -54,10 +54,10 @@ $(document).ready(function() {
     // Translations
     //-------------
 
-    lang_free = '<?php echo lang("reports_free"); ?>';
-    lang_cached = '<?php echo lang("reports_cached"); ?>';
-    lang_buffers = '<?php echo lang("reports_buffers"); ?>';
-    lang_kernel_and_apps = '<?php echo lang("reports_kernel_and_applications"); ?>';
+    lang_free = '<?php echo lang("base_free"); ?>';
+    lang_cached = '<?php echo lang("base_cached"); ?>';
+    lang_buffers = '<?php echo lang("base_buffers"); ?>';
+    lang_kernel_and_apps = '<?php echo lang("base_kernel_and_apps"); ?>';
 
     // Main
     //-----

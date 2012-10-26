@@ -77,7 +77,7 @@ class Memory extends ClearOS_Controller
         // Load views
         //-----------
 
-        $this->page->view_form('dashboard/memory', $data, lang('reports_memory_information'));
+        $this->page->view_form('dashboard/memory', $data, lang('base_memory'));
     }
 
     /**
