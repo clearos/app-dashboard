@@ -1,7 +1,7 @@
 
 Name: app-dashboard
 Epoch: 1
-Version: 1.1.0
+Version: 1.4.1
 Release: 1%{dist}
 Summary: Dashboard
 License: GPLv3
