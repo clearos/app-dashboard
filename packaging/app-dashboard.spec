@@ -10,6 +10,7 @@ Source: %{name}-%{version}.tar.gz
 Buildarch: noarch
 Requires: %{name}-core = 1:%{version}-%{release}
 Requires: app-base
+Requires: app-system-report
 
 %description
 The Dashboard provides a high-level overview of your system.
