@@ -60,14 +60,39 @@ class Dashboard extends ClearOS_Controller
 
         $this->lang->load('dashboard');
 
-        // Load views
-        //-----------
+        // Load controllers
+        //-----------------
 
-        $views = array(
-            'dashboard/stats',
-            'dashboard/memory'
-        );
+        $controllers = array();
 
-        $this->page->view_forms($views, lang('dashboard_app_name'));
+        if (clearos_app_installed('resource_report')) {
+            $controllers[] = array(
+                'controller' => 'resource_report/memory',
+                'method' => 'dashboard',
+            );
+
+            $controllers[] = array(
+                'controller' => 'resource_report/system_load',
+                'method' => 'dashboard',
+            );
+        }
+
+        if (clearos_app_installed('system_report')) {
+            $controllers[] = array(
+                'controller' => 'system_report/stats',
+                'method' => 'index',
+            );
+        }
+
+        if (clearos_app_installed('software_updates')) {
+            $controllers[] = array(
+                'controller' => 'software_updates/activity',
+                'method' => 'index',
+            );
+        }
+
+        // $options['type'] = MY_Page::TYPE_DASHBOARD;
+
+        $this->page->view_controllers($controllers, lang('dashboard_app_name'), $options);
     }
 }

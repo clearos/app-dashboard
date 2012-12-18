@@ -5,7 +5,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 $app['basename'] = 'dashboard';
-$app['version'] = '1.4.7';
+$app['version'] = '1.4.8';
 $app['release'] = '1';
 $app['vendor'] = 'ClearFoundation';
 $app['packager'] = 'ClearFoundation';
@@ -29,7 +29,6 @@ $app['subcategory'] = lang('base_subcategory_overview');
 
 $app['controllers']['dashboard']['title'] = $app['name'];
 $app['controllers']['shutdown']['title'] = lang('base_shutdown_restart');
-$app['controllers']['memory']['title'] = lang('report_memory_information');
 
 /////////////////////////////////////////////////////////////////////////////
 // Packaging
@@ -37,4 +36,11 @@ $app['controllers']['memory']['title'] = lang('report_memory_information');
 
 $app['core_requires'] = array(
     'app-reports-core',
+);
+
+// app-system-report is not really a requirement, but provides a
+// sane upgrade path from pre 6.4 releases.  Feel free to remove one day.
+
+$app['requires'] = array(
+    'app-system-report',
 );
