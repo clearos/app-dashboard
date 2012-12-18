@@ -20,6 +20,7 @@ Summary: Dashboard - Core
 License: LGPLv3
 Group: ClearOS/Libraries
 Requires: app-base-core
+Requires: app-base-core >= 1:1.4.8
 Requires: app-reports-core
 
 %description core
