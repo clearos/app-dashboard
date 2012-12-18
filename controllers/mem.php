@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Dashboard controller.
+ * Memory information controller.
  *
  * @category   Apps
  * @package    Dashboard
@@ -34,7 +34,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 /**
- * Dashboard controller.
+ * Memory information controller.
  *
  * @category   Apps
  * @package    Dashboard
@@ -45,60 +45,71 @@
  * @link       http://www.clearfoundation.com/docs/developer/apps/dashboard/
  */
 
-class Dashboard extends ClearOS_Controller
+class Mem extends ClearOS_Controller
 {
     /**
-     * Dashboard summary view.
+     * Shutdown and restart default controller
      *
      * @return view
      */
 
     function index()
     {
-        // Load libraries
+        // Load dependencies
+        //------------------
+
+        $this->lang->load('base');
+        $this->lang->load('reports');
+        $this->load->library('base/Stats');
+
+        $body = '';
+
+        // Load view data
         //---------------
 
-        $this->lang->load('dashboard');
-
-        // Load controllers
-        //-----------------
-
-        $controllers = array();
-
-        if (clearos_app_installed('resource_report')) {
-            $controllers[] = array(
-                'controller' => 'resource_report/memory',
-                'method' => 'dashboard',
-            );
-
-            $controllers[] = array(
-                'controller' => 'resource_report/system_load',
-                'method' => 'dashboard',
-            );
-        } else {
-            $controllers[] = array(
-                'controller' => 'dashboard/mem',
-                'method' => 'index',
-            );
+        try {
+            $memory_info = $this->stats->get_memory_stats();
+        } catch (Exception $e) {
+            $this->page->view_exception($e);
+            return;
         }
 
-        if (clearos_app_installed('system_report')) {
+        // Load views
+        //-----------
 
-            $controllers[] = array(
-                'controller' => 'system_report/details',
-                'method' => 'index',
-            );
+        $this->page->view_form('dashboard/memory', $data, lang('base_memory'));
+    }
+
+    /**
+     * Report data.
+     *
+     * @return JSON report data
+     */
+
+    function get_data()
+    {
+        clearos_profile(__METHOD__, __LINE__);
+
+        // Load dependencies
+        //------------------
+
+        $this->load->library('base/Stats');
+
+        // Load data
+        //----------
+
+        try {
+            $data = $this->stats->get_memory_stats();
+        } catch (Exception $e) {
+            echo json_encode(array('code' => clearos_exception_code($e), 'errmsg' => clearos_exception_message($e)));
         }
 
-        if (clearos_app_installed('software_updates')) {
-            $controllers[] = array(
-                'controller' => 'software_updates/activity',
-                'method' => 'index',
-            );
-        }
+        // Show data
+        //----------
 
-        // $options['type'] = MY_Page::TYPE_DASHBOARD;
-
-        $this->page->view_controllers($controllers, lang('dashboard_app_name'), $options);
+        header('Cache-Control: no-cache, must-revalidate');
+        header('Expires: Fri, 01 Jan 2010 05:00:00 GMT');
+        header('Content-type: application/json');
+        echo json_encode($data);
     }
 }
