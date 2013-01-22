@@ -4,12 +4,12 @@
  * Dashboard view.
  *
  * @category   ClearOS
- * @package    Base
+ * @package    Dashboard
  * @subpackage Views
  * @author     ClearFoundation <developer@clearfoundation.com>
- * @copyright  2011 ClearFoundation
+ * @copyright  2011-2013 ClearFoundation
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License version 3 or later
- * @link       http://www.clearfoundation.com/docs/developer/apps/base/
+ * @link       http://www.clearfoundation.com/docs/developer/apps/dashboard/
  */
 
 ///////////////////////////////////////////////////////////////////////////////
