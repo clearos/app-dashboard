@@ -1,7 +1,7 @@
 
 Name: app-dashboard
 Epoch: 1
-Version: 1.4.8
+Version: 1.4.22
 Release: 1%{dist}
 Summary: Dashboard
 License: GPLv3
@@ -11,6 +11,8 @@ Buildarch: noarch
 Requires: %{name}-core = 1:%{version}-%{release}
 Requires: app-base
 Requires: app-system-report
+Requires: app-network-report
+Requires: app-resource-report
 
 %description
 The Dashboard provides a high-level overview of your system.
@@ -20,7 +22,7 @@ Summary: Dashboard - Core
 License: LGPLv3
 Group: ClearOS/Libraries
 Requires: app-base-core
-Requires: app-base-core >= 1:1.4.8
+Requires: app-base-core >= 1:1.4.22
 Requires: app-reports-core
 
 %description core

@@ -39,12 +39,15 @@ $this->lang->load('base');
 // Form 
 ///////////////////////////////////////////////////////////////////////////////
 
-echo "<p>" . lang('base_shutdown_restart_help') . "</p>";
-echo "<div align='center'>";
-echo button_set(
+$options['align'] = 'center';
+$buttons = button_set(
     array(
         anchor_custom('/app/dashboard/shutdown/confirm/shutdown', lang('base_shutdown'), 'high'),
         anchor_custom('/app/dashboard/shutdown/confirm/restart', lang('base_restart'), 'high')
     )
 );
-echo "</div>";
+
+echo sidebar_header(lang('base_shutdown_restart'));
+echo sidebar_text(lang('base_shutdown_restart_help'));
+echo sidebar_text($buttons, $options);
+echo sidebar_footer();
