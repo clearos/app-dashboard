@@ -1,7 +1,7 @@
 
 Name: app-dashboard
 Epoch: 1
-Version: 1.4.30
+Version: 1.5.10
 Release: 1%{dist}
 Summary: Dashboard
 License: GPLv3
@@ -10,9 +10,6 @@ Source: %{name}-%{version}.tar.gz
 Buildarch: noarch
 Requires: %{name}-core = 1:%{version}-%{release}
 Requires: app-base
-Requires: app-system-report
-Requires: app-network-report
-Requires: app-resource-report
 
 %description
 The Dashboard provides a high-level overview of your system.
