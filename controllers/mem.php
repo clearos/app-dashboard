@@ -59,7 +59,6 @@ class Mem extends ClearOS_Controller
         //------------------
 
         $this->lang->load('base');
-        $this->lang->load('reports');
         $this->load->library('base/Stats');
 
         $body = '';

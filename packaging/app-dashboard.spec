@@ -20,7 +20,6 @@ License: LGPLv3
 Group: ClearOS/Libraries
 Requires: app-base-core
 Requires: app-base-core >= 1:1.4.22
-Requires: app-reports-core
 
 %description core
 The Dashboard provides a high-level overview of your system.
@@ -72,8 +71,6 @@ exit 0
 %files core
 %defattr(-,root,root)
 %exclude /usr/clearos/apps/dashboard/packaging
-%exclude /usr/clearos/apps/dashboard/tests
 %dir /usr/clearos/apps/dashboard
 /usr/clearos/apps/dashboard/deploy
 /usr/clearos/apps/dashboard/language
-/usr/clearos/apps/dashboard/libraries

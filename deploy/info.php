@@ -36,5 +36,4 @@ $app['controllers']['shutdown']['title'] = lang('base_shutdown_restart');
 
 $app['core_requires'] = array(
     'app-base-core >= 1:1.4.22',
-    'app-reports-core',
 );
