@@ -59,46 +59,20 @@ class Dashboard extends ClearOS_Controller
         //---------------
 
         $this->lang->load('dashboard');
+        $this->load->library('dashboard/Dashboard', NULL, 'my_dashboard');
 
         // Load controllers
         //-----------------
 
-        $controllers = array();
+        $data = array(
+            'rows' => $this->my_dashboard->get_max_rows(),
+            'layout' => $this->my_dashboard->get_layout()
+        );
 
-        if (clearos_app_installed('resource_report')) {
-            $controllers[] = array(
-                'controller' => 'resource_report/memory',
-                'method' => 'dashboard',
-            );
+        $dashboard_widgets = array('intrusion_prevention_report/dashboard_widget', 'smtp/trusted');
 
-            $controllers[] = array(
-                'controller' => 'resource_report/system_load',
-                'method' => 'dashboard',
-            );
-        } else {
-            $controllers[] = array(
-                'controller' => 'dashboard/mem',
-                'method' => 'index',
-            );
-        }
+        $data['widgets'] = $this->page->view_controllers($dashboard_widgets, lang('dashboard_app_name'), array('type' => MY_Page::TYPE_DASHBOARD));
 
-        if (clearos_app_installed('system_report')) {
-
-            $controllers[] = array(
-                'controller' => 'system_report/details',
-                'method' => 'index',
-            );
-        }
-
-        if (clearos_app_installed('software_updates')) {
-            $controllers[] = array(
-                'controller' => 'software_updates/activity',
-                'method' => 'index',
-            );
-        }
-
-        // $options['type'] = MY_Page::TYPE_DASHBOARD;
-
-        $this->page->view_controllers($controllers, lang('dashboard_app_name'), $options);
+        $this->page->view_form('dashboard/canvas', $data, lang('dashboard_app_name'), array('type' => MY_Page::TYPE_SPOTLIGHT));
     }
 }

@@ -49,6 +49,18 @@ clearos_load_language('base');
 header('Content-Type:application/x-javascript');
 ?>
 
+$(function() {
+    //Make the dashboard widgets sortable Using jquery UI
+    $('.connectedSortable').sortable({
+        placeholder: 'sort-highlight',
+        connectWith: '.connectedSortable',
+        handle: '.box-header',
+        forcePlaceholderSize: true,
+        zIndex: 999999
+    }).disableSelection();
+    $('.box-header').css('cursor','move');
+});
+
 $(document).ready(function() {
 
     // Translations
