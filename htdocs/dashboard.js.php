@@ -51,25 +51,20 @@ header('Content-Type:application/x-javascript');
 
 $(document).ready(function() {
 
-    $(function() {
-        'use strict';
-        //Make the dashboard widgets sortable Using jquery UI
-        $('.connectedSortable').sortable({
-            placeholder: 'sort-highlight',
-            connectWith: '.connectedSortable',
-            handle: '.box-header',
-            forcePlaceholderSize: true,
-            stop: function(event,ui) {
-                console.log('new order is ')
-                $(".connectedSortable section").each(function(){
-                    console.log(this.id);
-                });
-            },
-            zIndex: 999999
-        }).disableSelection();
-        $('.box-header').css('cursor','move');
+        $(function() {
+            $(".grid").sortable({
+                axis: 'x',
+                tolerance: 'pointer',
+                stop: function(event, ui) {
+                    console.log('new order is ')
+                    $(".grid .sortable").each(function(){
+                        console.log(this.id);
+                    });
+                },
+                zIndex: 999999
+            }).disableSelection();
+            $('.box-header').css('cursor','move');
     });
-
 
     // Translations
     //-------------

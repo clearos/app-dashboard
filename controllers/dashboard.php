@@ -79,11 +79,10 @@ class Dashboard extends ClearOS_Controller
                 }
             }
         }
-        //$dashboard_widgets = array('intrusion_prevention_report/dashboard_widget', 'smtp/trusted');
-        if (!empty($dashboard_widgets)) {
-            $data['widgets'] = $this->page->view_controllers($dashboard_widgets, lang('dashboard_app_name'), array('type' => MY_Page::TYPE_DASHBOARD));
-        }
 
-        $this->page->view_form('dashboard/canvas', $data, lang('dashboard_app_name'), array('type' => MY_Page::TYPE_SPOTLIGHT));
+        if (!empty($dashboard_widgets))
+            $data['widgets'] = $this->page->view_controllers($dashboard_widgets, lang('dashboard_app_name'), array('type' => MY_Page::TYPE_DASHBOARD_WIDGET));
+
+        $this->page->view_form('dashboard/canvas', $data, lang('dashboard_app_name'), array('type' => MY_Page::TYPE_DASHBOARD));
     }
 }
