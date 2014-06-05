@@ -40,12 +40,13 @@ clearos_load_language('dashboard');
 
 use \clearos\apps\base\Configuration_File as Configuration_File;
 use \clearos\apps\base\Engine as Engine;
-use \clearos\apps\log_viewer\Log_Viewer as Log_Viewer;
 use \clearos\apps\base\File as File;
+use \clearos\apps\base\Folder as Folder;
 
 clearos_load_library('base/Configuration_File');
 clearos_load_library('base/Engine');
 clearos_load_library('base/File');
+clearos_load_library('base/Folder');
 
 // Exceptions
 //-----------
@@ -154,6 +155,10 @@ class Dashboard extends Engine
             $this->_load();
 
         if (empty($this->config['layout']))
+            return NULL;
+        else
+            return json_decode($this->config['layout'], TRUE);
+    /*
             return array(
                 0 => array(
                     'columns' => array(
@@ -176,8 +181,38 @@ class Dashboard extends Engine
                     )
                 )
             );
+    */
 
-        return json_decode($this->config['layout'], TRUE);
+    }
+
+    /**
+     * Get registered widgets.
+     *
+     * @return array
+     * @throws Engine_Exception
+     */
+
+    function get_registered_widgets()
+    {
+        clearos_profile(__METHOD__, __LINE__);
+
+        if ($this->_use_cache_data()) {
+            if (! $this->loaded)
+                $this->_load();
+            return unserialize($this->config['registered_widgets']);
+        }
+
+        $master = array();
+        $app_list = clearos_get_apps();
+        foreach ($app_list as $app) {
+            // Re-init array
+            if (!isset($app['dashboard_widgets']))
+                continue;
+            $master = array_merge_recursive($master, $app['dashboard_widgets']);
+        }
+
+        $this->_set_parameter('registered_widgets', serialize($master));
+        return $master;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -230,12 +265,62 @@ class Dashboard extends Engine
             throw new Engine_Exception(clearos_exception_message($e), CLEAROS_ERROR);
         }
 
-        $this->is_loaded = FALSE;
+        $this->loaded = FALSE;
+    }
+
+    /**
+     * Check the cache widget list
+     *
+     * @access private
+     *
+     * @return boolean true if cached data available
+     */
+
+    protected function _use_cache_data()
+    {
+        clearos_profile(__METHOD__, __LINE__, $sig);
+
+        try {
+            // 2 minutes is OK for us
+            $cache_time = 120;
+            $filename = self::FILE_CONFIG;
+
+            if (file_exists($filename))
+                $lastmod = filemtime($filename);
+            else
+                $lastmod = 0;
+
+            if ($lastmod && (time() - $lastmod < $cache_time)) {
+                    return TRUE;
+            }
+            return FALSE;
+        } catch (Exception $e) {
+            return FALSE;
+        }
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     // V A L I D A T I O N   M E T H O D S
     ///////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Validation routine for row layout.
+     *
+     * @param array $rows array
+     *
+     * @return mixed void if rows is OK, errmsg otherwise
+     */
+
+    public function validate_rows($rows)
+    {
+        clearos_profile(__METHOD__, __LINE__);
+        if (!is_array($rows) && !empty($rows))
+            return lang('dashboard_invalid_layout');
+        foreach ($rows as $columns) {
+            if (!is_numeric($columns))
+                return lang('dashboard_invalid_layout');
+        }
+    }
 
     /**
      * Validation routine for layout.
@@ -250,9 +335,11 @@ class Dashboard extends Engine
         clearos_profile(__METHOD__, __LINE__);
         if (!is_array($layout) && !empty($layout))
             return lang('dashboard_invalid_layout');
-        foreach ($layout as $columns) {
-            if (!is_numeric($columns))
-                return lang('dashboard_invalid_layout');
+        foreach ($layout as $row => $column) {
+            foreach ($column['columns'] as $entry => $info) {
+                if (empty($info['controller']))
+                    return lang('dashboard_controller_missing');
+            }
         }
     }
 

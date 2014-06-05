@@ -1,13 +1,13 @@
 <?php
 
 /**
- * Dashboard settings view.
+ * Dashboard view.
  *
  * @category   apps
  * @package    dashboard
  * @subpackage views
  * @author     ClearFoundation <developer@clearfoundation.com>
- * @copyright  2014 ClearFoundation
+ * @copyright  2011-2013 ClearFoundation
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License version 3 or later
  * @link       http://www.clearfoundation.com/docs/developer/apps/dashboard/
  */
@@ -33,43 +33,11 @@
 // Load dependencies
 ///////////////////////////////////////////////////////////////////////////////
 
-$this->lang->load('base');
 $this->lang->load('dashboard');
 
-///////////////////////////////////////////////////////////////////////////////
-// Form open
-///////////////////////////////////////////////////////////////////////////////
-
-echo form_open('dashboard/settings');
-echo form_header(lang('base_settings'));
-
-///////////////////////////////////////////////////////////////////////////////
-// Form fields and buttons
-///////////////////////////////////////////////////////////////////////////////
-
-$read_only = FALSE;
-$buttons = array(
-    form_submit_update('submit'),
-    anchor_cancel('/app/dashboard')
-);
-
-$rows = 5;
-$col_options = array(
-    0 => lang('dashboard_none'),
-    1 => 1,
-    2 => 2,
-    3 => 3,
-    4 => 4,
-    6 => 6
-);
-for ($row = 0; $row < $rows; $row++)
-    echo field_dropdown("layout[$row]", $col_options, count($layout[$row]['columns']), lang('dashboard_number_of_cols') . ' ' . ($row + 1), FALSE);
-
-echo field_button_set($buttons);
-
-///////////////////////////////////////////////////////////////////////////////
-// Form close
-///////////////////////////////////////////////////////////////////////////////
-
+$widget_options = array_merge_recursive($widget_options, $widget_options_a);
+echo form_open();
+echo form_header();
+echo field_dropdown('', $widget_options, 0, '', FALSE, array('id' => 'bob', 'no-field' => TRUE));
 echo form_footer();
 echo form_close();

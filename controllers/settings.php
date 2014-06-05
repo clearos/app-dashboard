@@ -88,7 +88,7 @@ class Settings extends ClearOS_Controller
         // Set validation rules
         //---------------------
 
-        $this->form_validation->set_policy('layout', 'dashboard/Dashboard', 'validate_layout', TRUE);
+        $this->form_validation->set_policy('layout', 'dashboard/Dashboard', 'validate_rows', TRUE);
 
         $form_ok = $this->form_validation->run();
 
@@ -108,6 +108,8 @@ class Settings extends ClearOS_Controller
                     for ($col = 0; $col < $columns; $col++) {
                         if (isset($layout_old[$row]['columns'][$col]['controller']))
                             $layout[$row]['columns'][$col]['controller'] = $layout_old[$row]['columns'][$col]['controller'];
+                        else
+                            $layout[$row]['columns'][$col]['controller'] = 'dashboard/placeholder';
                     }
                 }
                 $this->dashboard->set_layout($layout);
