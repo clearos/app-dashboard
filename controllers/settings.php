@@ -109,7 +109,7 @@ class Settings extends ClearOS_Controller
                         if (isset($layout_old[$row]['columns'][$col]['controller']))
                             $layout[$row]['columns'][$col]['controller'] = $layout_old[$row]['columns'][$col]['controller'];
                         else
-                            $layout[$row]['columns'][$col]['controller'] = 'dashboard/placeholder';
+                            $layout[$row]['columns'][$col]['controller'] = "dashboard/placeholder";
                     }
                 }
                 $this->dashboard->set_layout($layout);
@@ -133,5 +133,27 @@ class Settings extends ClearOS_Controller
 
         $this->page->view_form('dashboard/settings', $data, lang('dashboard_app_name'));
 
+    }
+
+    /**
+     * Set a dashboard widget
+     *
+     * @param string $mode mode
+     *
+     * @return void
+     */
+
+    function set_widget()
+    {
+        clearos_profile(__METHOD__, __LINE__);
+
+        header('Cache-Control: no-cache, must-revalidate');
+        header('Content-type: application/json');
+
+        try {
+            echo json_encode(array('code' => 0, 'msg' => 'Yes'));
+        } catch (Exception $e) {
+            echo json_encode(Array('code' => clearos_exception_code($e), 'errmsg' => clearos_exception_message($e)));
+        }
     }
 }

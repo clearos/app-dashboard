@@ -50,10 +50,12 @@ class Placeholder extends ClearOS_Controller
     /**
      * Placeholder view.
      *
+     * @param $position table position
+     *
      * @return view
      */
 
-    function index()
+    function index($position = NULL)
     {
         // Load libraries
         //---------------
@@ -61,7 +63,24 @@ class Placeholder extends ClearOS_Controller
         $this->lang->load('dashboard');
         $this->load->library('dashboard/Dashboard');
 
-        $data['widget_options'] = $this->dashboard->get_registered_widgets();
+        $data = array(
+            'row' => NULL,
+            'col' => NULL,
+        );
+
+        if ($position != NULL)
+            list($data['row'], $data['col']) = preg_split('/-/', $position);
+
+        $options = $this->dashboard->get_registered_widgets();
+
+        foreach ($options as $category => $widget) {
+            foreach ($widget as $controller => $option) {
+                if ($option['restricted'])
+                    continue;
+                $data['widget_options'][$category][$controller] = $option['title'];
+            }
+        }
+            
         $this->page->view_form('dashboard/placeholder', $data, lang('dashboard_placeholder'), array('type' => MY_Page::TYPE_DASHBOARD));
     }
 }

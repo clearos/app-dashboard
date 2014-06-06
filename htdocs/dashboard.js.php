@@ -51,19 +51,35 @@ header('Content-Type:application/x-javascript');
 
 $(document).ready(function() {
 
-        $(function() {
-            $(".grid").sortable({
-                axis: 'x',
-                tolerance: 'pointer',
-                stop: function(event, ui) {
-                    console.log('new order is ')
-                    $(".grid .sortable").each(function(){
-                        console.log(this.id);
-                    });
-                },
-                zIndex: 999999
-            }).disableSelection();
-            $('.box-header').css('cursor','move');
+    $(function() {
+        $(".grid").sortable({
+            axis: 'x',
+            tolerance: 'pointer',
+            stop: function(event, ui) {
+                console.log('new order is ')
+                $(".grid .sortable").each(function(){
+                    console.log(this.id);
+                });
+            },
+            zIndex: 999999
+        }).disableSelection();
+        $('.box-header').css('cursor','move');
+    });
+
+    $('.widget-select').click(function(e) {
+        e.preventDefault();
+        $.ajax({
+            url: '/app/dashboard/settings/set_widget',
+            method: 'POST',
+            data: 'ci_csrf_token=' + $.cookie('ci_csrf_token'),
+            dataType: 'json',
+            success : function(payload) {
+                graph_data(payload);
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                window.setTimeout(get_report, 3000);
+            }
+        });
     });
 
     // Translations

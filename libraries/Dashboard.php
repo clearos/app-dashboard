@@ -199,10 +199,18 @@ class Dashboard extends Engine
         if ($this->_use_cache_data()) {
             if (! $this->loaded)
                 $this->_load();
-            return unserialize($this->config['registered_widgets']);
+            if (isset($this->config['registered_widgets']))
+                return unserialize($this->config['registered_widgets']);
         }
 
-        $master = array();
+        $master = array(
+            lang('dashboard_select_widget') => array(
+                0 => array(
+                    'title' => lang('base_select'),
+                    'restricted' => FALSE
+                )
+            )
+        );
         $app_list = clearos_get_apps();
         foreach ($app_list as $app) {
             // Re-init array

@@ -35,9 +35,14 @@
 
 $this->lang->load('dashboard');
 
-$widget_options = array_merge_recursive($widget_options, $widget_options_a);
 echo form_open();
-echo form_header();
-echo field_dropdown('', $widget_options, 0, '', FALSE, array('id' => 'bob', 'no-field' => TRUE));
+echo form_header(NULL);
+echo field_dropdown(
+    "widget_$row-$col", $widget_options,
+    0,
+    '',
+    FALSE,
+    array('id' => 'widget_' . $row . '-' . $col, 'no-field' => TRUE, 'class' => array('widget-select'))
+);
 echo form_footer();
 echo form_close();
