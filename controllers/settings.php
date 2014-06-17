@@ -150,8 +150,57 @@ class Settings extends ClearOS_Controller
         header('Cache-Control: no-cache, must-revalidate');
         header('Content-type: application/json');
 
+        // Load libraries
+        //---------------
+
+        $this->lang->load('dashboard');
+        $this->load->library('dashboard/Dashboard');
+
         try {
-            echo json_encode(array('code' => 0, 'msg' => 'Yes'));
+            list($row, $col) = explode('-', preg_replace('/grid-/', '', $this->input->post('grid')));
+            $my_controller = $this->input->post('controller');
+            $this->dashboard->set_widget($row, $col, $my_controller);
+            echo json_encode(array('code' => 0, 'errmsg' => ''));
+        } catch (Exception $e) {
+            echo json_encode(Array('code' => clearos_exception_code($e), 'errmsg' => clearos_exception_message($e)));
+        }
+    }
+
+    /**
+     * Reorder a row's widget set
+     *
+     * @return view
+     */
+
+    function reorder()
+    {
+
+        clearos_profile(__METHOD__, __LINE__);
+
+        header('Cache-Control: no-cache, must-revalidate');
+        header('Content-type: application/json');
+
+        // Load libraries
+        //---------------
+
+        $this->lang->load('dashboard');
+        $this->load->library('dashboard/Dashboard');
+
+        // The controller index orders controllers on a per row basis
+        try {
+            $ci = json_decode($this->input->post('controllers'));
+            $row = $this->input->post('row');
+                clearos_profile(__METHOD__, __LINE__, "SHIT" . $ci);
+            foreach ($ci as $col => $url) {
+                // A URL with a plain integer is just a placeholder
+                //clearos_profile(__METHOD__, __LINE__, "SHIT". preg_replace('/-/', '/', substr($url, 3)));
+                if (is_numeric(substr($url, 3)))
+                    $this->dashboard->set_widget($row, $col, 'dashboard/placeholder');
+                else
+                    $this->dashboard->set_widget($row, $col, preg_replace('/-/', '/', substr($url, 3)));
+            }
+
+            echo json_encode(array('code' => 0, 'errmsg' => ''));
         } catch (Exception $e) {
             echo json_encode(Array('code' => clearos_exception_code($e), 'errmsg' => clearos_exception_message($e)));
         }

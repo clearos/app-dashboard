@@ -51,35 +51,46 @@ header('Content-Type:application/x-javascript');
 
 $(document).ready(function() {
 
+    $('.widget-select').change(function() {
+        $.ajax({
+            url: '/app/dashboard/settings/set_widget',
+            method: 'POST',
+            data: 'ci_csrf_token=' + $.cookie('ci_csrf_token') + '&grid=' + this.id + '&controller=' + encodeURIComponent($('#' + this.id).val()),
+            dataType: 'json',
+            success : function(json) {
+                window.location.reload();
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                // TODO
+            }
+        });
+    });
+
     $(function() {
         $(".grid").sortable({
             axis: 'x',
             tolerance: 'pointer',
             stop: function(event, ui) {
-                console.log('new order is ')
-                $(".grid .sortable").each(function(){
-                    console.log(this.id);
+                row_id = $(this).parent()['context'].id.substr(4);
+                //console.log($(this).parent()['context'].id);
+                console.log($(this).sortable('toArray'))
+                $.ajax({
+                    url: '/app/dashboard/settings/reorder',
+                    method: 'POST',
+                    data: 'ci_csrf_token=' + $.cookie('ci_csrf_token') + '&row=' + row_id + '&controllers=' + JSON.stringify($(this).sortable('toArray')),
+                    dataType: 'json',
+                    success : function(json) {
+                        console.log('YES ' + json.errmsg);
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        // TODO
+                        console.log('YES ' + textStatus);
+                    }
                 });
             },
             zIndex: 999999
         }).disableSelection();
         $('.box-header').css('cursor','move');
-    });
-
-    $('.widget-select').click(function(e) {
-        e.preventDefault();
-        $.ajax({
-            url: '/app/dashboard/settings/set_widget',
-            method: 'POST',
-            data: 'ci_csrf_token=' + $.cookie('ci_csrf_token'),
-            dataType: 'json',
-            success : function(payload) {
-                graph_data(payload);
-            },
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                window.setTimeout(get_report, 3000);
-            }
-        });
     });
 
     // Translations

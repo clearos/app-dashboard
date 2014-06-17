@@ -121,6 +121,44 @@ class Dashboard extends Engine
     }
 
     /**
+     * Set widget.
+     *
+     * @param int    $row row
+     * @param int    $col column
+     * @param string $controller controller
+     *
+     * @return void
+     * @throws Engine_Exception
+     */
+
+    function set_widget($row, $col, $controller)
+    {
+        clearos_profile(__METHOD__, __LINE__, "SHIT $row . $col . " . $controller);
+
+        if (! $this->loaded)
+            $this->_load();
+
+        Validation_Exception::is_valid($this->validate_widget($row, $col, $controller));
+
+        $layout = array();
+
+        if (!empty($this->config['layout']))
+            $layout = json_decode($this->config['layout'], TRUE);
+
+        $columns = $layout[$row]['columns'];
+
+        foreach ($columns as $column => $info) {
+            if ($col == $column) 
+                $columns[$col] = array (
+                    'controller' => $controller
+                );
+        }
+        $layout[$row]['columns'] = $columns;
+
+        $this->set_layout($layout);
+    }
+
+    /**
      * Get max rows.
      *
      * @return int
@@ -196,7 +234,7 @@ class Dashboard extends Engine
     {
         clearos_profile(__METHOD__, __LINE__);
 
-        if ($this->_use_cache_data()) {
+        if ($this->_use_cache_data() && $_SERVER['SERVER_PORT'] != 1501) {
             if (! $this->loaded)
                 $this->_load();
             if (isset($this->config['registered_widgets']))
@@ -289,6 +327,10 @@ class Dashboard extends Engine
         clearos_profile(__METHOD__, __LINE__, $sig);
 
         try {
+            // Never cache data in devel mode
+            if ($_SERVER['SERVER_PORT'] == 1501)
+                return FALSE;
+
             // 2 minutes is OK for us
             $cache_time = 120;
             $filename = self::FILE_CONFIG;
@@ -299,7 +341,7 @@ class Dashboard extends Engine
                 $lastmod = 0;
 
             if ($lastmod && (time() - $lastmod < $cache_time)) {
-                    return TRUE;
+                return TRUE;
             }
             return FALSE;
         } catch (Exception $e) {
@@ -328,6 +370,22 @@ class Dashboard extends Engine
             if (!is_numeric($columns))
                 return lang('dashboard_invalid_layout');
         }
+    }
+
+    /**
+     * Validation routine for adding widget.
+     *
+     * @param int    $row row
+     * @param int    $col col
+     * @param string $controller controller
+     *
+     * @return mixed void if widget is OK, errmsg otherwise
+     */
+
+    public function validate_widget($row, $col, $controller)
+    {
+        clearos_profile(__METHOD__, __LINE__);
+        // TODO...ACL
     }
 
     /**

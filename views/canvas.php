@@ -53,13 +53,14 @@ if ($layout == NULL)
 foreach ($layout as $row => $meta) {
     if (count($meta['columns']) == 0)
         continue;
-    echo row_open(count($meta['columns']) > 1 ? array('class' => 'grid') : NULL);
+    echo row_open(count($meta['columns']) > 1 ? array('id' => 'row_' . $row, 'class' => 'grid') : NULL);
     // Based on Bootstrap 12 columns grid, take 12 / colnum
     foreach ($meta['columns'] as $col) {
-        $id = array('id' => preg_replace('/\//', '-', $col['controller']));
-        if (preg_match('/.*\/placeholder$', $col['controller']))
-            $id = NULL;
-        echo column_open(12 / count($meta['columns']), NULL, NULL, array($id, 'class' => 'sortable'));
+        $id = 'ci_' . preg_replace('/\//', '-', $col['controller']);
+        //$id = 'ci_' . $col['controller_index'];
+        if (preg_match('/.*\/placeholder$/', $col['controller']))
+            $id = 'ci_' . rand();
+        echo column_open(12 / count($meta['columns']), NULL, NULL, array('id' => $id, 'class' => 'sortable'));
         echo $widgets[$col['controller_index']];
         echo column_close();
     }

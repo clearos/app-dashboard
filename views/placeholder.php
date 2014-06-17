@@ -38,11 +38,11 @@ $this->lang->load('dashboard');
 echo form_open();
 echo form_header(NULL);
 echo field_dropdown(
-    "widget_$row-$col", $widget_options,
+    "grid-$row-$col", $widget_options,
     0,
     '',
     FALSE,
-    array('id' => 'widget_' . $row . '-' . $col, 'no-field' => TRUE, 'class' => array('widget-select'))
+    array('id' => 'grid-' . $row . '-' . $col, 'no-field' => TRUE, 'class' => array('widget-select'))
 );
 echo form_footer();
 echo form_close();
