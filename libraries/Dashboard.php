@@ -133,7 +133,7 @@ class Dashboard extends Engine
 
     function set_widget($row, $col, $controller)
     {
-        clearos_profile(__METHOD__, __LINE__, "SHIT $row . $col . " . $controller);
+        clearos_profile(__METHOD__, __LINE__);
 
         if (! $this->loaded)
             $this->_load();
@@ -154,6 +154,42 @@ class Dashboard extends Engine
                 );
         }
         $layout[$row]['columns'] = $columns;
+
+        $this->set_layout($layout);
+    }
+
+    /**
+     * Set widget.
+     *
+     * @param string $controller controller
+     *
+     * @return void
+     * @throws Engine_Exception
+     */
+
+    function delete_widget($controller)
+    {
+        clearos_profile(__METHOD__, __LINE__);
+
+        if (! $this->loaded)
+            $this->_load();
+
+        Validation_Exception::is_valid($this->validate_widget($controller));
+
+        $layout = array();
+
+        if (!empty($this->config['layout']))
+            $layout = json_decode($this->config['layout'], TRUE);
+
+
+        foreach ($layout as $row => $rowinfo) {
+            foreach ($rowinfo['columns'] as $column => $colinfo) {
+                if ($colinfo['controller'] == $controller) {
+                    $layout[$row]['columns'][$column]['controller'] = 'dashboard/placeholder';
+                    break;
+                }
+            }
+        }
 
         $this->set_layout($layout);
     }

@@ -51,6 +51,30 @@ header('Content-Type:application/x-javascript');
 
 $(document).ready(function() {
 
+    // TODO Move to framework???
+    if ($(location).attr('href').match('.*dashboard|.*dashboard#$') != null)
+    $('.content-header h1').last().append('<span style="float: right;"><a href="/app/dashboard/settings"><i class="fa fa-gear"></a></i><a href="#" class="dashboard-delete" style="padding-left:10px; padding-right: 10px;"><i class="fa fa-trash-o"></i></a></span>');
+    $('.dashboard-delete').click(function() {
+        if (!$('.dashboard-delete').hasClass('showing-disable')) {
+            $('.dashboard-delete').addClass('showing-disable');
+            $('.sortable > .box').append('<div class="overlay"><a href="#" class="dashboard-delete-element"><i class="fa fa-times-circle"></i></a></div>');
+        }
+    });
+    $(document).on('click', '.dashboard-delete-element', function() {
+        var controller = $(this).closest('.sortable')[0].id;
+        $.ajax({
+            url: '/app/dashboard/settings/delete_widget',
+            method: 'POST',
+            data: 'ci_csrf_token=' + $.cookie('ci_csrf_token') + '&controller=' + encodeURIComponent(controller),
+            dataType: 'json',
+            success : function(json) {
+                window.location.reload();
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                // TODO
+            }
+        });
+    });
     $('.widget-select').change(function() {
         $.ajax({
             url: '/app/dashboard/settings/set_widget',
@@ -72,7 +96,6 @@ $(document).ready(function() {
             tolerance: 'pointer',
             stop: function(event, ui) {
                 row_id = $(this).parent()['context'].id.substr(4);
-                //console.log($(this).parent()['context'].id);
                 console.log($(this).sortable('toArray'))
                 $.ajax({
                     url: '/app/dashboard/settings/reorder',
