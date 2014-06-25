@@ -75,7 +75,8 @@ class Placeholder extends ClearOS_Controller
 
         foreach ($options as $category => $widget) {
             foreach ($widget as $controller => $option) {
-                if ($option['restricted'])
+                // TODO - Hardcode root.  What if superuser changes?  What about ACL override?
+                if ($option['restricted'] && $this->session->userdata('username') != 'root')
                     continue;
                 $data['widget_options'][$category][$controller] = $option['title'];
             }

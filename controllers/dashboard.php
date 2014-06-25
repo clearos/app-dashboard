@@ -73,9 +73,10 @@ class Dashboard extends ClearOS_Controller
         foreach ($data['layout'] as $row_num => $row) {
             foreach ($row['columns'] as $col => $meta) {
                 if (isset($meta['controller'])) {
+                    $parts = explode('/', $meta['controller']);
                     $dashboard_widgets[] = array(
-                        'controller' => $meta['controller'],
-                        'method' => 'index',
+                        'controller' => $parts[0] . '/' . $parts[1],
+                        'method' => (isset($parts[2]) ? $parts[2] : 'index'),
                         'params' => $row_num . '-' . $col
                     );
                     $data['layout'][$row_num]['columns'][$col]['controller_index'] = $index;

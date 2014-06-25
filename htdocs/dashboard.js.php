@@ -52,14 +52,24 @@ header('Content-Type:application/x-javascript');
 $(document).ready(function() {
 
     // TODO Move to framework???
-    if ($(location).attr('href').match('.*dashboard|.*dashboard#$') != null)
-    $('.content-header h1').last().append('<span style="float: right;"><a href="/app/dashboard/settings"><i class="fa fa-gear"></a></i><a href="#" class="dashboard-delete" style="padding-left:10px; padding-right: 10px;"><i class="fa fa-trash-o"></i></a></span>');
+    if ($(location).attr('href').match('.*dashboard$|.*dashboard#$') != null)
+        $('.content-header h1').last().append(
+            '<span style="float: right;"><a href="/app/dashboard/settings">' +
+            '<i class="fa fa-gear"></a></i><a href="#" class="dashboard-delete" style="padding-left:10px; padding-right: 10px;">' +
+            '<i class="fa fa-trash-o"></i></a>' +
+            '</span>'
+        );
+
     $('.dashboard-delete').click(function() {
-        if (!$('.dashboard-delete').hasClass('showing-disable')) {
+        if ($('.dashboard-delete').hasClass('showing-disable')) {
+            $('.dashboard-delete').removeClass('showing-disable');
+            $('.overlay').remove();
+        } else {
             $('.dashboard-delete').addClass('showing-disable');
             $('.sortable > .box').append('<div class="overlay"><a href="#" class="dashboard-delete-element"><i class="fa fa-times-circle"></i></a></div>');
         }
     });
+
     $(document).on('click', '.dashboard-delete-element', function() {
         var controller = $(this).closest('.sortable')[0].id;
         $.ajax({
