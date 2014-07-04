@@ -229,4 +229,22 @@ class Settings extends ClearOS_Controller
             echo json_encode(Array('code' => clearos_exception_code($e), 'errmsg' => clearos_exception_message($e)));
         }
     }
+
+    /**
+     * Dashboard setup default layout.
+     *
+     * @return void
+     */
+
+    function default_layout()
+    {
+        // Load libraries
+        //---------------
+
+        $this->load->library('dashboard/Dashboard');
+
+        $this->dashboard->set_default_layout();
+        redirect('dashboard');
+    }
+
 }

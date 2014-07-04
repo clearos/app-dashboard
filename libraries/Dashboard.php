@@ -215,6 +215,42 @@ class Dashboard extends Engine
     }
 
     /**
+     * Set default layout.
+     *
+     * @return array
+     * @throws Engine_Exception
+     */
+
+    function set_default_layout()
+    {
+        clearos_profile(__METHOD__, __LINE__);
+
+        $layout = array(
+            0 => array(
+                'columns' => array(
+                    0 => array (
+                        'controller' => 'dashboard/placeholder'
+                    ),
+                    1 => array (
+                        'controller' => 'dashboard/placeholder'
+                    ),
+                    2 => array (
+                        'controller' => 'dashboard/placeholder'
+                    )
+                )
+            ),
+            1 => array(
+                'columns' => array(
+                    0 => array (
+                        'controller' => 'dashboard/placeholder'
+                    )
+                )
+            )
+        );
+        $this->set_layout($layout);
+    }
+
+    /**
      * Get layout.
      *
      * @return array

@@ -66,7 +66,11 @@ $(document).ready(function() {
             $('.overlay').remove();
         } else {
             $('.dashboard-delete').addClass('showing-disable');
-            $('.sortable > .box').append('<div class="overlay"><a href="#" class="dashboard-delete-element"><i class="fa fa-times-circle"></i></a></div>');
+            $('.db-widget').each(function() {
+                $('#' + this.id).find('.box:first').append(
+                    '<div class="overlay"><a href="#" class="dashboard-delete-element"><i class="fa fa-times-circle"></i></a></div>'
+                );
+            });
         }
     });
 

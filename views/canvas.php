@@ -44,7 +44,7 @@ if ($layout == NULL)
         field_button_set(
             array(
                 anchor_custom('/app/dashboard/settings', lang('base_configure')),
-                anchor_custom('/app/dashboard/settings/default', lang('base_use_default'))
+                anchor_custom('/app/dashboard/settings/default_layout', lang('base_use_default'))
             ), NULL, 'non-field'
         ) .
         "</div>"
@@ -57,10 +57,12 @@ foreach ($layout as $row => $meta) {
     // Based on Bootstrap 12 columns grid, take 12 / colnum
     foreach ($meta['columns'] as $col) {
         $id = 'ci_' . preg_replace('/\//', '-', $col['controller']);
-        //$id = 'ci_' . $col['controller_index'];
-        if (preg_match('/.*\/placeholder$/', $col['controller']))
+        $add_class = ' db-widget';
+        if (preg_match('/.*\/placeholder$/', $col['controller'])) {
             $id = 'ci_' . rand();
-        echo column_open(12 / count($meta['columns']), NULL, NULL, array('id' => $id, 'class' => 'sortable'));
+            $add_class = ' placeholder';
+        }
+        echo column_open(12 / count($meta['columns']), NULL, NULL, array('id' => $id, 'class' => 'sortable' . $add_class));
         echo $widgets[$col['controller_index']];
         echo column_close();
     }
