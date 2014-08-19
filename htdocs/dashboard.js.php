@@ -51,15 +51,6 @@ header('Content-Type:application/x-javascript');
 
 $(document).ready(function() {
 
-    // TODO Move to framework???
-    if ($(location).attr('href').match('.*dashboard$|.*dashboard#$') != null)
-        $('.content-header h1').last().append(
-            '<span style="float: right;"><a href="/app/dashboard/settings">' +
-            '<i class="fa fa-gear"></a></i><a href="#" class="dashboard-delete" style="padding-left:10px; padding-right: 10px;">' +
-            '<i class="fa fa-trash-o"></i></a>' +
-            '</span>'
-        );
-
     $('.dashboard-delete').click(function() {
         if ($('.dashboard-delete').hasClass('showing-disable')) {
             $('.dashboard-delete').removeClass('showing-disable');
@@ -110,18 +101,16 @@ $(document).ready(function() {
             tolerance: 'pointer',
             stop: function(event, ui) {
                 row_id = $(this).parent()['context'].id.substr(4);
-                console.log($(this).sortable('toArray'))
                 $.ajax({
                     url: '/app/dashboard/settings/reorder',
                     method: 'POST',
                     data: 'ci_csrf_token=' + $.cookie('ci_csrf_token') + '&row=' + row_id + '&controllers=' + JSON.stringify($(this).sortable('toArray')),
                     dataType: 'json',
                     success : function(json) {
-                        console.log('YES ' + json.errmsg);
+                        // Do nothing
                     },
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
-                        // TODO
-                        console.log('YES ' + textStatus);
+                        // Ignore? TODO
                     }
                 });
             },

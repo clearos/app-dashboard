@@ -58,7 +58,6 @@ class Dashboard extends ClearOS_Controller
         // Load libraries
         //---------------
 
-devel_print_r($this->session->userdata);
         $this->lang->load('dashboard');
         $this->load->library('dashboard/Dashboard', NULL, 'my_dashboard');
 
@@ -89,6 +88,15 @@ devel_print_r($this->session->userdata);
         if (!empty($dashboard_widgets))
             $data['widgets'] = $this->page->view_controllers($dashboard_widgets, lang('dashboard_app_name'), array('type' => MY_Page::TYPE_DASHBOARD_WIDGET));
 
-        $this->page->view_form('dashboard/canvas', $data, lang('dashboard_app_name'), array('type' => MY_Page::TYPE_DASHBOARD));
+        // Add settings and delete widget to breadcrumb trail
+        $breadcrumb_links = array(
+            'settings' => array('url' => '/app/dashboard/settings', 'tag' => lang('base_settings')),
+            'delete' => array('url' => '#', 'tag' => lang('base_delete'), 'class' => 'dashboard-delete')
+        );
+
+        $this->page->view_form('dashboard/canvas', $data, lang('dashboard_app_name'), array(
+            'type' => MY_Page::TYPE_DASHBOARD,
+            'breadcrumb_links' => $breadcrumb_links)
+        );
     }
 }

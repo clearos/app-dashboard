@@ -225,6 +225,7 @@ class Dashboard extends Engine
     {
         clearos_profile(__METHOD__, __LINE__);
 
+        // Setup a typical layout, 3 small widgets followed by 1 large width
         $layout = array(
             0 => array(
                 'columns' => array(
@@ -268,51 +269,28 @@ class Dashboard extends Engine
             return NULL;
         else
             return json_decode($this->config['layout'], TRUE);
-    /*
-            return array(
-                0 => array(
-                    'columns' => array(
-                        0 => array (
-                            'controller' => 'intrusion_prevention_report/dashboard_widget',
-                            'controller_index' => 0,
-                        ),
-                        1 => array (
-                            'controller' => 'smtp/trusted',
-                            'controller_index' => 1,
-                        )
-                    )
-                ),
-                1 => array(
-                    'columns' => array(
-                        0 => array (
-                            'controller' => 'smtp/forwarding',
-                            'controller_index' => 3,
-                        )
-                    )
-                )
-            );
-    */
-
     }
 
     /**
      * Get registered widgets.
      *
+     * @param boolean $remove_active removes widgets that are already implemented in Dashboard
+     *
      * @return array
      * @throws Engine_Exception
      */
 
-    function get_registered_widgets()
+    function get_registered_widgets($remove_active = TRUE)
     {
         clearos_profile(__METHOD__, __LINE__);
 
-        if ($this->_use_cache_data() && $_SERVER['SERVER_PORT'] != 1501) {
+        if ($this->_use_cache_data() && $_SERVER['SERVER_PORT'] != 1501 && $remove_active) {
             if (! $this->loaded)
                 $this->_load();
             if (isset($this->config['registered_widgets']))
                 return unserialize($this->config['registered_widgets']);
         }
-
+        
         $master = array(
             lang('dashboard_select_widget') => array(
                 0 => array(
@@ -329,7 +307,31 @@ class Dashboard extends Engine
             $master = array_merge_recursive($master, $app['dashboard_widgets']);
         }
 
-        $this->_set_parameter('registered_widgets', serialize($master));
+        // Get in use widget set
+        if ($remove_active) {
+            foreach ($master as $category => $widget) {
+                $in_use = array();
+                $layout = $this->get_layout();
+                foreach ($layout as $row => $meta) {
+                    if (count($meta['columns']) == 0)
+                        continue;
+                    foreach ($meta['columns'] as $col) {
+                        if (!preg_match('/.*\/placeholder$/', $col['controller']))
+                            $in_use[] = $col['controller'];
+                            //$in_use[] = preg_replace('/\//', '-', $col['controller']);
+                    }
+                }
+
+                foreach ($widget as $controller => $meta) {
+                    if ($controller && in_array($controller, $in_use))
+                        unset($master[$category][$controller]);
+                }
+            }
+        }
+
+        // Only cache a set if we are removing active widgets from array
+        if (!$remove_active)
+            $this->_set_parameter('registered_widgets', serialize($master));
         return $master;
     }
 
