@@ -1,13 +1,13 @@
 <?php
 
 /**
- * Dashboard view.
+ * Dashboard settings view.
  *
  * @category   apps
  * @package    dashboard
  * @subpackage views
  * @author     ClearFoundation <developer@clearfoundation.com>
- * @copyright  2011-2013 ClearFoundation
+ * @copyright  2014 ClearFoundation
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License version 3 or later
  * @link       http://www.clearfoundation.com/docs/developer/apps/dashboard/
  */
@@ -34,20 +34,42 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 $this->lang->load('base');
+$this->lang->load('dashboard');
 
 ///////////////////////////////////////////////////////////////////////////////
-// Form 
+// Form open
 ///////////////////////////////////////////////////////////////////////////////
 
-$options['align'] = 'center';
-$buttons = button_set(
-    array(
-        anchor_custom('/app/dashboard/shutdown/confirm/shutdown', lang('base_shutdown'), 'high'),
-        anchor_custom('/app/dashboard/shutdown/confirm/restart', lang('base_restart'), 'high')
-    )
+echo form_open('dashboard/settings');
+echo form_header(lang('base_settings'));
+
+///////////////////////////////////////////////////////////////////////////////
+// Form fields and buttons
+///////////////////////////////////////////////////////////////////////////////
+
+$read_only = FALSE;
+$buttons = array(
+    form_submit_update('submit'),
+    anchor_cancel('/app/dashboard')
 );
 
-echo sidebar_header(lang('base_shutdown_restart'));
-echo sidebar_text(lang('base_shutdown_restart_help'));
-echo sidebar_text($buttons, $options);
-echo sidebar_footer();
+$rows = 5;
+$col_options = array(
+    0 => lang('dashboard_none'),
+    1 => 1,
+    2 => 2,
+    3 => 3,
+    4 => 4,
+    6 => 6
+);
+for ($row = 0; $row < $rows; $row++)
+    echo field_dropdown("layout[$row]", $col_options, count($layout[$row]['columns']), lang('dashboard_number_of_cols') . ' ' . ($row + 1), FALSE);
+
+echo field_button_set($buttons);
+
+///////////////////////////////////////////////////////////////////////////////
+// Form close
+///////////////////////////////////////////////////////////////////////////////
+
+echo form_footer();
+echo form_close();

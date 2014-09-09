@@ -1,13 +1,13 @@
 <?php
 
 /**
- * Shutdown and restart controller.
+ * Dashboard view.
  *
  * @category   apps
  * @package    dashboard
- * @subpackage controllers
+ * @subpackage views
  * @author     ClearFoundation <developer@clearfoundation.com>
- * @copyright  2012 ClearFoundation
+ * @copyright  2011-2013 ClearFoundation
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License version 3 or later
  * @link       http://www.clearfoundation.com/docs/developer/apps/dashboard/
  */
@@ -25,44 +25,24 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.  
 //
 ///////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-// C L A S S
+// Load dependencies
 ///////////////////////////////////////////////////////////////////////////////
 
-/**
- * Shutdown and restart controller.
- *
- * @category   apps
- * @package    dashboard
- * @subpackage controllers
- * @author     ClearFoundation <developer@clearfoundation.com>
- * @copyright  2012 ClearFoundation
- * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License version 3 or later
- * @link       http://www.clearfoundation.com/docs/developer/apps/dashboard/
- */
+$this->lang->load('dashboard');
 
-class Report extends ClearOS_Controller
-{
-    /**
-     * Shutdown and restart default controller
-     *
-     * @return view
-     */
-
-    function sidebar()
-    {
-        // Load dependencies
-        //------------------
-
-        $this->lang->load('base');
-
-        // Load views
-        //-----------
-
-        $this->page->view_form('shutdown', array(), lang('base_shutdown_restart'));
-    }
-}
+echo form_open();
+echo form_header(NULL);
+echo field_dropdown(
+    "grid-$row-$col", $widget_options,
+    0,
+    '',
+    FALSE,
+    array('id' => 'grid-' . $row . '-' . $col, 'no-field' => TRUE, 'class' => array('widget-select'))
+);
+echo form_footer();
+echo form_close();

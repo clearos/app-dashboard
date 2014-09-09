@@ -51,6 +51,74 @@ header('Content-Type:application/x-javascript');
 
 $(document).ready(function() {
 
+    $('.dashboard-delete').click(function() {
+        if ($('.dashboard-delete').hasClass('showing-disable')) {
+            $('.dashboard-delete').removeClass('showing-disable');
+            $('.overlay').remove();
+        } else {
+            $('.dashboard-delete').addClass('showing-disable');
+            $('.db-widget').each(function() {
+                $('#' + this.id).find('.box:first').append(
+                    '<div class="overlay"><a href="#" class="dashboard-delete-element"><i class="fa fa-times-circle"></i></a></div>'
+                );
+            });
+        }
+    });
+
+    $(document).on('click', '.dashboard-delete-element', function() {
+        var controller = $(this).closest('.sortable')[0].id;
+        $.ajax({
+            url: '/app/dashboard/settings/delete_widget',
+            method: 'POST',
+            data: 'ci_csrf_token=' + $.cookie('ci_csrf_token') + '&controller=' + encodeURIComponent(controller),
+            dataType: 'json',
+            success : function(json) {
+                window.location.reload();
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                // TODO
+            }
+        });
+    });
+    $('.widget-select').change(function() {
+        $.ajax({
+            url: '/app/dashboard/settings/set_widget',
+            method: 'POST',
+            data: 'ci_csrf_token=' + $.cookie('ci_csrf_token') + '&grid=' + this.id + '&controller=' + encodeURIComponent($('#' + this.id).val()),
+            dataType: 'json',
+            success : function(json) {
+                window.location.reload();
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                // TODO
+            }
+        });
+    });
+
+    $(function() {
+        $(".grid").sortable({
+            axis: 'x',
+            tolerance: 'pointer',
+            stop: function(event, ui) {
+                row_id = $(this).parent()['context'].id.substr(4);
+                $.ajax({
+                    url: '/app/dashboard/settings/reorder',
+                    method: 'POST',
+                    data: 'ci_csrf_token=' + $.cookie('ci_csrf_token') + '&row=' + row_id + '&controllers=' + JSON.stringify($(this).sortable('toArray')),
+                    dataType: 'json',
+                    success : function(json) {
+                        // Do nothing
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        // Ignore? TODO
+                    }
+                });
+            },
+            zIndex: 999999
+        }).disableSelection();
+        $('.box-header').css('cursor','move');
+    });
+
     // Translations
     //-------------
 

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Dashboard controller.
+ * Placeholder controller.
  *
  * @category   apps
  * @package    dashboard
@@ -34,7 +34,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 /**
- * Dashboard controller.
+ * Placeholder controller.
  *
  * @category   apps
  * @package    dashboard
@@ -45,58 +45,43 @@
  * @link       http://www.clearfoundation.com/docs/developer/apps/dashboard/
  */
 
-class Dashboard extends ClearOS_Controller
+class Placeholder extends ClearOS_Controller
 {
     /**
-     * Dashboard summary view.
+     * Placeholder view.
+     *
+     * @param $position table position
      *
      * @return view
      */
 
-    function index()
+    function index($position = NULL)
     {
         // Load libraries
         //---------------
 
         $this->lang->load('dashboard');
-        $this->load->library('dashboard/Dashboard', NULL, 'my_dashboard');
-
-        // Load controllers
-        //-----------------
+        $this->load->library('dashboard/Dashboard');
 
         $data = array(
-            'rows' => $this->my_dashboard->get_max_rows(),
-            'layout' => $this->my_dashboard->get_layout()
+            'row' => NULL,
+            'col' => NULL,
         );
 
-        $index = 0;
-        foreach ($data['layout'] as $row_num => $row) {
-            foreach ($row['columns'] as $col => $meta) {
-                if (isset($meta['controller'])) {
-                    $parts = explode('/', $meta['controller']);
-                    $dashboard_widgets[] = array(
-                        'controller' => $parts[0] . '/' . $parts[1],
-                        'method' => (isset($parts[2]) ? $parts[2] : 'index'),
-                        'params' => $row_num . '-' . $col
-                    );
-                    $data['layout'][$row_num]['columns'][$col]['controller_index'] = $index;
-                    $index++;
-                }
+        if ($position != NULL)
+            list($data['row'], $data['col']) = preg_split('/-/', $position);
+
+        $options = $this->dashboard->get_registered_widgets();
+
+        foreach ($options as $category => $widget) {
+            foreach ($widget as $controller => $option) {
+                // TODO - Hardcode root.  What if superuser changes?  What about ACL override?
+                if ($option['restricted'] && $this->session->userdata('username') != 'root')
+                    continue;
+                $data['widget_options'][$category][$controller] = $option['title'];
             }
         }
-
-        if (!empty($dashboard_widgets))
-            $data['widgets'] = $this->page->view_controllers($dashboard_widgets, lang('dashboard_app_name'), array('type' => MY_Page::TYPE_DASHBOARD_WIDGET));
-
-        // Add settings and delete widget to breadcrumb trail
-        $breadcrumb_links = array(
-            'settings' => array('url' => '/app/dashboard/settings', 'tag' => lang('base_settings')),
-            'delete' => array('url' => '#', 'tag' => lang('base_delete'), 'class' => 'dashboard-delete')
-        );
-
-        $this->page->view_form('dashboard/canvas', $data, lang('dashboard_app_name'), array(
-            'type' => MY_Page::TYPE_DASHBOARD,
-            'breadcrumb_links' => $breadcrumb_links)
-        );
+            
+        $this->page->view_form('dashboard/placeholder', $data, lang('dashboard_placeholder'), array('type' => MY_Page::TYPE_DASHBOARD));
     }
 }
