@@ -5,7 +5,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 $app['basename'] = 'dashboard';
-$app['version'] = '1.6.5';
+$app['version'] = '2.0.0';
 $app['release'] = '1';
 $app['vendor'] = 'ClearFoundation';
 $app['packager'] = 'ClearFoundation';
@@ -34,4 +34,13 @@ $app['controllers']['shutdown']['title'] = lang('base_shutdown_restart');
 
 $app['core_requires'] = array(
     'app-base-core >= 1:1.4.22',
+);
+
+$app['core_file_manifest'] = array(
+    'dashboard.conf' => array(
+        'target' => '/etc/clearos/dashboard.conf',
+        'mode' => '0644',
+        'config' => TRUE,
+        'config_params' => 'noreplace',
+    ),
 );
