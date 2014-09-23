@@ -1,7 +1,7 @@
 
 Name: app-dashboard
 Epoch: 1
-Version: 1.6.5
+Version: 2.0.0
 Release: 1%{dist}
 Summary: Dashboard
 License: GPLv3
@@ -34,6 +34,7 @@ This package provides the core API and libraries.
 mkdir -p -m 755 %{buildroot}/usr/clearos/apps/dashboard
 cp -r * %{buildroot}/usr/clearos/apps/dashboard/
 
+install -D -m 0644 packaging/dashboard.conf %{buildroot}/etc/clearos/dashboard.conf
 
 %post
 logger -p local6.notice -t installer 'app-dashboard - installing'
@@ -74,3 +75,5 @@ exit 0
 %dir /usr/clearos/apps/dashboard
 /usr/clearos/apps/dashboard/deploy
 /usr/clearos/apps/dashboard/language
+/usr/clearos/apps/dashboard/libraries
+%config(noreplace) /etc/clearos/dashboard.conf
