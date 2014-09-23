@@ -97,7 +97,6 @@ $(document).ready(function() {
 
     $(function() {
         $(".grid").sortable({
-            axis: 'x',
             tolerance: 'pointer',
             stop: function(event, ui) {
                 row_id = $(this).parent()['context'].id.substr(4);
