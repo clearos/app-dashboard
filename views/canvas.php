@@ -39,15 +39,13 @@ $this->lang->load('dashboard');
 if ($layout == NULL)
     echo infobox_warning(
         lang('dashboard_setup_required'),
-        "<div>" . lang('dashboard_configure_now') . "</div>" .
-        "<div class='text-center' style='padding: 20px;'>" .
-        field_button_set(
+        lang('dashboard_configure_now'),
+        array('buttons' =>
             array(
                 anchor_custom('/app/dashboard/settings', lang('base_configure')),
                 anchor_custom('/app/dashboard/settings/default_layout', lang('base_use_default'))
-            ), NULL, 'non-field'
-        ) .
-        "</div>"
+            )
+        )
     );
     
 foreach ($layout as $row => $meta) {
