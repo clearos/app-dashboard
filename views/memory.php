@@ -39,4 +39,4 @@ $this->lang->load('dashboard');
 // Chart
 ///////////////////////////////////////////////////////////////////////////////
 
-echo chart_widget(lang('base_memory'), "<div id='memory_chart'></div>");
+echo chart_container(lang('base_memory'), 'memory_chart');
