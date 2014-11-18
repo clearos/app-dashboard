@@ -131,7 +131,7 @@ class Settings extends ClearOS_Controller
         // Load views
         //-----------
 
-        $this->page->view_form('dashboard/settings', $data, lang('dashboard_app_name'));
+        $this->page->view_form('dashboard/settings', $data, lang('base_settings'));
 
     }
 
