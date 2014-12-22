@@ -59,7 +59,7 @@ class Dashboard extends ClearOS_Controller
         //---------------
 
         $this->lang->load('dashboard');
-        $this->load->library('dashboard/Dashboard', NULL, 'my_dashboard');
+        $this->load->library('dashboard/Dashboard', array('username' => $this->session->userdata('username')), 'my_dashboard');
 
         // Load controllers
         //-----------------

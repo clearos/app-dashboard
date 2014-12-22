@@ -86,6 +86,7 @@ class Dashboard extends Engine
     // V A R I A B L E S
     ///////////////////////////////////////////////////////////////////////////////
 
+    protected $username = NULL;
     protected $loaded = FALSE;
     protected $config = array();
 
@@ -95,11 +96,15 @@ class Dashboard extends Engine
 
     /**
      * Dashboard constructor.
+     *
+     * @param string $username username for preferences to be stored as
+     *
      */
 
-    function __construct()
+    function __construct($options)
     {
         clearos_profile(__METHOD__, __LINE__);
+        $this->username = $options['username'];
     }
 
     /**
@@ -142,8 +147,12 @@ class Dashboard extends Engine
 
         $layout = array();
 
-        if (!empty($this->config['layout']))
-            $layout = json_decode($this->config['layout'], TRUE);
+        $field = 'layout';
+        if ($this->username != NULL)
+            $field .= '.' . $this->username;
+
+        if (!empty($this->config[$field]))
+            $layout = json_decode($this->config[$field], TRUE);
 
         $columns = $layout[$row]['columns'];
 
@@ -178,8 +187,12 @@ class Dashboard extends Engine
 
         $layout = array();
 
-        if (!empty($this->config['layout']))
-            $layout = json_decode($this->config['layout'], TRUE);
+        $field = 'layout';
+        if ($this->username != NULL)
+            $field .= '.' . $this->username;
+
+        if (!empty($this->config[$field]))
+            $layout = json_decode($this->config[$field], TRUE);
 
 
         foreach ($layout as $row => $rowinfo) {
@@ -208,10 +221,14 @@ class Dashboard extends Engine
         if (! $this->loaded)
             $this->_load();
 
-        if (empty($this->config['max_rows']))
+        $field = 'max_rows';
+        if ($this->username != NULL)
+            $field .= '.' . $this->username;
+
+        if (empty($this->config[$field]))
             return self::MAX_ROWS;
 
-        return $this->config['max_rows'];
+        return $this->config[$field];
     }
 
     /**
@@ -265,10 +282,14 @@ class Dashboard extends Engine
         if (! $this->loaded)
             $this->_load();
 
-        if (empty($this->config['layout']))
+        $field = 'layout';
+        if ($this->username != NULL)
+            $field .= '.' . $this->username;
+
+        if (empty($this->config[$field]))
             return NULL;
         else
-            return json_decode($this->config['layout'], TRUE);
+            return json_decode($this->config[$field], TRUE);
     }
 
     /**
@@ -331,7 +352,7 @@ class Dashboard extends Engine
 
         // Only cache a set if we are removing active widgets from array
         if (!$remove_active)
-            $this->_set_parameter('registered_widgets', serialize($master));
+            $this->_set_parameter('registered_widgets', serialize($master), TRUE);
         return $master;
     }
 
@@ -365,18 +386,21 @@ class Dashboard extends Engine
     /**
      * Generic set routine.
      *
-     * @param string $key   key name
-     * @param string $value value for the key
+     * @param string  $key    key name
+     * @param string  $value  value for the key
+     * @param boolean $global user or globally applied
      *
      * @return  void
      * @throws Engine_Exception
      */
 
-    private function _set_parameter($key, $value)
+    private function _set_parameter($key, $value, $global = FALSE)
     {
         clearos_profile(__METHOD__, __LINE__);
 
         try {
+            if (!$global && $this->username != NULL)
+                $key .= "." . $this->username;
             $file = new File(self::FILE_CONFIG, TRUE);
             $match = $file->replace_lines("/^$key\s*=.*/", "$key = $value\n");
             if (!$match)

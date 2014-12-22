@@ -61,7 +61,7 @@ class Placeholder extends ClearOS_Controller
         //---------------
 
         $this->lang->load('dashboard');
-        $this->load->library('dashboard/Dashboard');
+        $this->load->library('dashboard/Dashboard', array('username' => $this->session->userdata('username')));
 
         $data = array(
             'row' => NULL,

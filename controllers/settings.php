@@ -83,7 +83,7 @@ class Settings extends ClearOS_Controller
         //---------------
 
         $this->lang->load('dashboard');
-        $this->load->library('dashboard/Dashboard');
+        $this->load->library('dashboard/Dashboard', array('username' => $this->session->userdata('username')));
 
         // Set validation rules
         //---------------------
@@ -152,7 +152,7 @@ class Settings extends ClearOS_Controller
         //---------------
 
         $this->lang->load('dashboard');
-        $this->load->library('dashboard/Dashboard');
+        $this->load->library('dashboard/Dashboard', array('username' => $this->session->userdata('username')));
 
         try {
             list($row, $col) = explode('-', preg_replace('/grid-/', '', $this->input->post('grid')));
@@ -181,7 +181,7 @@ class Settings extends ClearOS_Controller
         //---------------
 
         $this->lang->load('dashboard');
-        $this->load->library('dashboard/Dashboard');
+        $this->load->library('dashboard/Dashboard', array('username' => $this->session->userdata('username')));
 
         try {
             $my_controller = preg_replace(array('/ci_/', '/-/'), array('', '/'), $this->input->post('controller'));
@@ -210,7 +210,7 @@ class Settings extends ClearOS_Controller
         //---------------
 
         $this->lang->load('dashboard');
-        $this->load->library('dashboard/Dashboard');
+        $this->load->library('dashboard/Dashboard', array('username' => $this->session->userdata('username')));
 
         // The controller index orders controllers on a per row basis
         try {
@@ -241,7 +241,7 @@ class Settings extends ClearOS_Controller
         // Load libraries
         //---------------
 
-        $this->load->library('dashboard/Dashboard');
+        $this->load->library('dashboard/Dashboard', array('username' => $this->session->userdata('username')));
 
         $this->dashboard->set_default_layout();
         redirect('dashboard');

@@ -67,6 +67,7 @@ $(document).ready(function() {
 
     $(document).on('click', '.dashboard-delete-element', function() {
         var controller = $(this).closest('.sortable')[0].id;
+        $(this).closest('div.box').remove();
         $.ajax({
             url: '/app/dashboard/settings/delete_widget',
             method: 'POST',
