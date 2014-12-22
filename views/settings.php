@@ -55,7 +55,7 @@ $buttons = array(
 
 $rows = 5;
 $col_options = array(
-    0 => lang('dashboard_none'),
+    0 => lang('base_none'),
     1 => 1,
     2 => 2,
     3 => 3,
