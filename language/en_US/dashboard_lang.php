@@ -7,6 +7,5 @@ $lang['dashboard_controller_missing'] = 'Dashboard Widget Missing or Uninstalled
 $lang['dashboard_invalid_layout'] = 'Layout is invalid.';
 $lang['dashboard_number_of_cols'] = 'Columns - Row';
 $lang['dashboard_placeholder'] = 'Placeholder';
-$lang['dashboard_return_to_dashboard'] = 'Return to Dashboard';
 $lang['dashboard_select_widget'] = 'Widget Selection';
 $lang['dashboard_setup_required'] = 'Setup Required';
