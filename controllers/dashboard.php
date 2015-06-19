@@ -70,15 +70,32 @@ class Dashboard extends ClearOS_Controller
         );
 
         $index = 0;
+
+        // Get registered widgets...an app may have been removed, taking widget with it.
+        $registered = $this->my_dashboard->get_registered_widgets(FALSE);
+
+        $available_controllers = array();
+        foreach ($registered as $registered_widget) {
+            $available_controllers = array_merge($available_controllers, array_keys($registered_widget));
+        }
         foreach ($data['layout'] as $row_num => $row) {
             foreach ($row['columns'] as $col => $meta) {
                 if (isset($meta['controller'])) {
                     $parts = explode('/', $meta['controller']);
-                    $dashboard_widgets[] = array(
-                        'controller' => $parts[0] . '/' . $parts[1],
-                        'method' => (isset($parts[2]) ? $parts[2] : 'index'),
-                        'params' => $row_num . '-' . $col
-                    );
+                    if (!in_array($meta['controller'], $available_controllers) && !preg_match('/\/placeholder$/', $meta['controller'])) {
+                        // Insert deleted app placeholder
+                        $dashboard_widgets[] = array(
+                            'controller' => 'dashboard/widget_not_available',
+                            'method' => 'index',
+                            'params' => $parts[0]
+                        );
+                    } else {
+                        $dashboard_widgets[] = array(
+                            'controller' => $parts[0] . '/' . $parts[1],
+                            'method' => (isset($parts[2]) ? $parts[2] : 'index'),
+                            'params' => $row_num . '-' . $col
+                        );
+                    }
                     $data['layout'][$row_num]['columns'][$col]['controller_index'] = $index;
                     $index++;
                 }

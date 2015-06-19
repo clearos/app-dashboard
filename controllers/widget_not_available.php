@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Placeholder controller.
+ * Widget Not Available controller.
  *
  * @category   apps
  * @package    dashboard
@@ -45,17 +45,17 @@
  * @link       http://www.clearfoundation.com/docs/developer/apps/dashboard/
  */
 
-class Placeholder extends ClearOS_Controller
+class Widget_Not_Available extends ClearOS_Controller
 {
     /**
-     * Placeholder view.
+     * Widget Not Available view.
      *
-     * @param $position table position
+     * @param $basename the basename where the widget originates from
      *
      * @return view
      */
 
-    function index($position = NULL)
+    function index($basename)
     {
         // Load libraries
         //---------------
@@ -64,24 +64,9 @@ class Placeholder extends ClearOS_Controller
         $this->load->library('dashboard/Dashboard', array('username' => $this->session->userdata('username')));
 
         $data = array(
-            'row' => NULL,
-            'col' => NULL,
+            'basename' => $basename
         );
 
-        if ($position != NULL)
-            list($data['row'], $data['col']) = preg_split('/-/', $position);
-
-        $options = $this->dashboard->get_registered_widgets();
-
-        foreach ($options as $category => $widget) {
-            foreach ($widget as $controller => $option) {
-                // TODO - Hardcode root.  What if superuser changes?  What about ACL override?
-                if ($option['restricted'] && $this->session->userdata('username') != 'root')
-                    continue;
-                $data['widget_options'][$category][$controller] = $option['title'];
-            }
-        }
-            
-        $this->page->view_form('dashboard/placeholder', $data, lang('dashboard_placeholder'), array('type' => MY_Page::TYPE_DASHBOARD));
+        $this->page->view_form('dashboard/widget_not_available', $data, lang('dashboard_placeholder'), array('type' => MY_Page::TYPE_DASHBOARD));
     }
 }
