@@ -102,18 +102,31 @@ class Dashboard extends ClearOS_Controller
             }
         }
 
-        if (!empty($dashboard_widgets))
+        if (!empty($dashboard_widgets)) {
             $data['widgets'] = $this->page->view_controllers($dashboard_widgets, lang('dashboard_app_name'), array('type' => MY_Page::TYPE_DASHBOARD_WIDGET));
 
+            // Load default helper javascript files from app widget
+            foreach ($dashboard_widgets as $widget) {
+                $basename = preg_replace('/\/.*/', '', $widget['controller']);
+
+                // Skip internal dashboard widgets, javascript already included
+                if ($basename === 'dashboard')
+                    continue;
+
+                // Add javascript if it exists
+                $javascript_path = clearos_app_base($basename) . '/htdocs/' . $basename . '.js.php' ;
+                if (file_exists($javascript_path))
+                    $options['javascript'][] = clearos_app_htdocs($basename) . '/' . $basename . '.js.php';
+            }
+        }
+
         // Add settings and delete widget to breadcrumb trail
-        $breadcrumb_links = array(
+        $options['breadcrumb_links'] = array(
             'settings' => array('url' => '/app/dashboard/settings', 'tag' => lang('base_settings')),
             'delete' => array('url' => '#', 'tag' => lang('base_delete'), 'class' => 'dashboard-delete')
         );
+        $options['type'] = MY_Page::TYPE_DASHBOARD;
 
-        $this->page->view_form('dashboard/canvas', $data, lang('dashboard_app_name'), array(
-            'type' => MY_Page::TYPE_DASHBOARD,
-            'breadcrumb_links' => $breadcrumb_links)
-        );
+        $this->page->view_form('dashboard/canvas', $data, lang('dashboard_app_name'), $options);
     }
 }
