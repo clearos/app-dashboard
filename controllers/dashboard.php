@@ -120,6 +120,10 @@ class Dashboard extends ClearOS_Controller
             }
         }
 
+// FIXME: just for dashboard jam
+$basename = 'home_reports';
+$options['javascript'][] = clearos_app_htdocs($basename) . '/' . $basename . '.js.php';
+
         // Add settings and delete widget to breadcrumb trail
         $options['breadcrumb_links'] = array(
             'settings' => array('url' => '/app/dashboard/settings', 'tag' => lang('base_settings')),
