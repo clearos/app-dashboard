@@ -1,6 +1,6 @@
 <?php
 
-$lang['dashboard_app_description'] = 'The Dashboard provides a high-level overview of your system.';
+$lang['dashboard_app_description'] = 'The Dashboard provides a high-level overview of your system.  It is customizable - installed apps may provide Dashboard Widgets that you can add to your layout.';
 $lang['dashboard_app_name'] = 'Dashboard';
 $lang['dashboard_configure_now'] = 'You have not configured your custom dashboard.  Configure it now or select the default.';
 $lang['dashboard_controller_missing'] = 'Dashboard Widget Missing or Uninstalled';
