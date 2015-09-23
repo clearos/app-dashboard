@@ -120,9 +120,11 @@ class Dashboard extends ClearOS_Controller
             }
         }
 
-// FIXME: just for dashboard jam
-$basename = 'home_reports';
-$options['javascript'][] = clearos_app_htdocs($basename) . '/' . $basename . '.js.php';
+        // KLUDGE: hook in reports javascript
+        $report_engine = clearos_driver('reports');
+
+        if (!empty($report_engine))
+            $options['javascript'][] = clearos_app_htdocs($report_engine) . '/' . $report_engine . '.js.php';
 
         // Add settings and delete widget to breadcrumb trail
         $options['breadcrumb_links'] = array(
