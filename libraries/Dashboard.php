@@ -81,6 +81,7 @@ class Dashboard extends Engine
 
     const FILE_CONFIG = '/etc/clearos/dashboard.conf';
     const MAX_ROWS = 5;
+    const CACHE_S = 120;
 
     ///////////////////////////////////////////////////////////////////////////////
     // V A R I A B L E S
@@ -123,6 +124,9 @@ class Dashboard extends Engine
         Validation_Exception::is_valid($this->validate_layout($layout));
 
         $this->_set_parameter('layout', json_encode($layout));
+
+        // Make sure any cache data is refreshed
+        $this->_set_parameter('registered_widgets_avail', NULL, TRUE);
     }
 
     /**
@@ -310,11 +314,14 @@ class Dashboard extends Engine
         clearos_profile(__METHOD__, __LINE__);
 
         $widgets = 'registered_widgets' . ($remove_active ? '_avail' : '');
-        if ($this->_use_cache_data() && $_SERVER['SERVER_PORT'] != 1501) {
+        if ($_SERVER['SERVER_PORT'] != 1501) {
             if (! $this->loaded)
                 $this->_load();
-            if (isset($this->config[$widgets]) && $this->config[$widgets] != NULL)
-                return unserialize($this->config['registered_widgets' . ($remove_active ? '_avail' : '')]);
+            if (isset($this->config[$widgets]) && $this->config[$widgets] != NULL) {
+                $json = json_decode($this->config[$widgets], TRUE);
+                if ($json !== FALSE && (time() - $json['lastmod']) < self::CACHE_S)
+                    return $json['data'];
+            }
         }
         
         $master = array(
@@ -355,7 +362,8 @@ class Dashboard extends Engine
             }
         }
 
-        $this->_set_parameter($widgets, serialize($master), TRUE);
+        $this->_set_parameter($widgets, json_encode(array('lastmod' => time(), 'data' => $master)), TRUE);
+
         return $master;
     }
 
@@ -413,41 +421,6 @@ class Dashboard extends Engine
         }
 
         $this->loaded = FALSE;
-    }
-
-    /**
-     * Check the cache widget list
-     *
-     * @access private
-     *
-     * @return boolean true if cached data available
-     */
-
-    protected function _use_cache_data()
-    {
-        clearos_profile(__METHOD__, __LINE__, $sig);
-
-        try {
-            // Never cache data in devel mode
-            if ($_SERVER['SERVER_PORT'] == 1501)
-                return FALSE;
-
-            // 2 minutes is OK for us
-            $cache_time = 120;
-            $filename = self::FILE_CONFIG;
-
-            if (file_exists($filename))
-                $lastmod = filemtime($filename);
-            else
-                $lastmod = 0;
-
-            if ($lastmod && (time() - $lastmod < $cache_time)) {
-                return TRUE;
-            }
-            return FALSE;
-        } catch (Exception $e) {
-            return FALSE;
-        }
     }
 
     ///////////////////////////////////////////////////////////////////////////////
