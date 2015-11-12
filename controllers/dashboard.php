@@ -93,7 +93,7 @@ class Dashboard extends ClearOS_Controller
                         $dashboard_widgets[] = array(
                             'controller' => $parts[0] . '/' . $parts[1],
                             'method' => (isset($parts[2]) ? $parts[2] : 'index'),
-                            'params' => $row_num . '-' . $col
+                            'params' => $row_num . '-' . $col . '-' . count($row['columns'])
                         );
                     }
                     $data['layout'][$row_num]['columns'][$col]['controller_index'] = $index;

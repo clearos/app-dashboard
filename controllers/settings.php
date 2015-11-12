@@ -125,6 +125,7 @@ class Settings extends ClearOS_Controller
         //---------------
         $data = array (
             'mode' => $mode,
+            'max_rows' => $this->dashboard->get_max_rows(),
             'layout' => $this->dashboard->get_layout()
         );
 

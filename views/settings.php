@@ -53,16 +53,14 @@ $buttons = array(
     anchor_cancel('/app/dashboard')
 );
 
-$rows = 5;
 $col_options = array(
     0 => lang('base_none'),
     1 => 1,
     2 => 2,
     3 => 3,
-    4 => 4,
-    6 => 6
+    4 => 4
 );
-for ($row = 0; $row < $rows; $row++)
+for ($row = 0; $row < $max_rows; $row++)
     echo field_dropdown("layout[$row]", $col_options, count($layout[$row]['columns']), lang('dashboard_number_of_cols') . ' ' . ($row + 1), FALSE);
 
 echo field_button_set($buttons);
