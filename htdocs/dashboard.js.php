@@ -115,7 +115,7 @@ $(document).ready(function() {
                 });
             },
             zIndex: 999999
-        }).disableSelection();
+        });
         $('.box-header').css('cursor','move');
     });
 
