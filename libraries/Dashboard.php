@@ -42,11 +42,13 @@ use \clearos\apps\base\Configuration_File as Configuration_File;
 use \clearos\apps\base\Engine as Engine;
 use \clearos\apps\base\File as File;
 use \clearos\apps\base\Folder as Folder;
+use \clearos\apps\base\Software as Software;
 
 clearos_load_library('base/Configuration_File');
 clearos_load_library('base/Engine');
 clearos_load_library('base/File');
 clearos_load_library('base/Folder');
+clearos_load_library('base/Software');
 
 // Exceptions
 //-----------
@@ -336,6 +338,11 @@ class Dashboard extends Engine
         foreach ($app_list as $app) {
             // Re-init array
             if (!isset($app['dashboard_widgets']))
+                continue;
+            // Check that the UI package is installed (containing widget controller)
+            $software = new Software("app-" . preg_replace("/_/", "-", $app['basename']));
+
+            if (!$software->is_installed())
                 continue;
             $master = array_merge_recursive($master, $app['dashboard_widgets']);
         }
