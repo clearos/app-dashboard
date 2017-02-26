@@ -1,7 +1,7 @@
 
 Name: app-dashboard
 Epoch: 1
-Version: 2.3.0
+Version: 2.3.20
 Release: 1%{dist}
 Summary: Dashboard
 License: GPLv3
@@ -72,6 +72,7 @@ exit 0
 %files core
 %defattr(-,root,root)
 %exclude /usr/clearos/apps/dashboard/packaging
+%exclude /usr/clearos/apps/dashboard/unify.json
 %dir /usr/clearos/apps/dashboard
 /usr/clearos/apps/dashboard/deploy
 /usr/clearos/apps/dashboard/language
