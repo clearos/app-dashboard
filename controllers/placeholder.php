@@ -71,7 +71,9 @@ class Placeholder extends ClearOS_Controller
         if ($position != NULL)
             list($data['row'], $data['col']) = preg_split('/-/', $position);
 
-        $options = $this->dashboard->get_registered_widgets();
+        // This is a bit odd.  In CodeIgniter 3.1.x, the name of the Dashboard object created in $this->load->library()
+        // is set set to my_dashboard.  This custom object name was registered in index.php.
+        $options = $this->my_dashboard->get_registered_widgets();
 
         foreach ($options as $category => $widget) {
             foreach ($widget as $controller => $option) {
