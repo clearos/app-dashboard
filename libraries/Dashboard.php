@@ -328,7 +328,7 @@ class Dashboard extends Engine
         
         $master = array(
             lang('dashboard_select_widget') => array(
-                0 => array(
+                -1 => array(
                     'title' => lang('base_select'),
                     'restricted' => FALSE
                 )

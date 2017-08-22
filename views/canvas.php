@@ -48,21 +48,21 @@ if ($layout == NULL)
         )
     );
     
-foreach ($layout as $row => $meta) {
-    if (count($meta['columns']) == 0)
-        continue;
-    echo row_open(count($meta['columns']) > 1 ? array('id' => 'row_' . $row, 'class' => 'grid') : NULL);
-    // Based on Bootstrap 12 columns grid, take 12 / colnum
-    foreach ($meta['columns'] as $col) {
-        $id = 'ci_' . preg_replace('/\//', '-', $col['controller']);
-        $add_class = ' db-widget';
-        if (preg_match('/.*\/placeholder$/', $col['controller'])) {
-            $id = 'ci_' . rand();
-            $add_class = ' placeholder';
+echo row_open(array('id' => 'row', 'class' => 'grid'));
+    foreach ($layout as $row => $meta) {
+        if (count($meta['columns']) == 0)
+            continue;
+        // Based on Bootstrap 12 columns grid, take 12 / colnum
+        foreach ($meta['columns'] as $col) {
+            $id = 'ci_' . preg_replace('/\//', '-', $col['controller']);
+            $add_class = ' db-widget';
+            if (preg_match('/.*\/placeholder$/', $col['controller'])) {
+                $id = 'ci_' . rand();
+                $add_class = ' placeholder';
+            }
+            echo column_open(4, NULL, NULL, array('id' => $id, 'class' => 'sortable' . $add_class));
+            echo $widgets[$col['controller_index']];
+            echo column_close();
         }
-        echo column_open(12 / count($meta['columns']), NULL, NULL, array('id' => $id, 'class' => 'sortable' . $add_class));
-        echo $widgets[$col['controller_index']];
-        echo column_close();
     }
-    echo row_close();
-}
+echo row_close();

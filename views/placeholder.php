@@ -39,7 +39,7 @@ echo form_open();
 echo form_header(NULL);
 echo field_dropdown(
     "grid-$row-$col", $widget_options,
-    0,
+    -1,
     '',
     FALSE,
     array('id' => 'grid-' . $row . '-' . $col, 'no-field' => TRUE, 'class' => array('widget-select'))
